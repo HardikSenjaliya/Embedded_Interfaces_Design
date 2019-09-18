@@ -20,20 +20,23 @@ tempunit = "C"
 count = 0
 humidity = 0.0
 temperature = 0.0
+disconnectflag=0
 
 class Ui_MainWindow(object):
 
     def sensor(self):
+        global disconnectflag
         global humidity,temperature
         DHT_SENSOR = Adafruit_DHT.DHT22
         DHT_PIN = 4
         humidity, temperature = Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)
 
         if humidity is not None and temperature is not None:
+            disconnectflag=0
             if tempunit == "F":
                 temperature = (temperature * 9)/5 + 32
         else:
-            print("Failed to retrieve data from humidity sensor")
+            disconnectflag=1
 
     def Getvals(self):
         global humidity,temperature
@@ -63,17 +66,26 @@ class Ui_MainWindow(object):
     def printvals(self):
         global humidity,temperature
         self.sensor()
-        datetimeobj1=datetime.now()
-        self.statusedit.setPlainText("    Time: "+str(datetimeobj1.hour)+":"+str(datetimeobj1.minute)+":"+str(datetimeobj1.second)+"\n"+"    Temperature: "+str(round(temperature,2))+" "+tempunit + "\n" +"    Humidity: "+str(round(humidity,1))+" "+"%")
+        if disconnectflag == 0:
+            datetimeobj1=datetime.now()
+            self.statusedit.setPlainText("    Reading: "+str(count)+"\n\n"+"    Time: "+str(datetimeobj1.hour)+":"+str(datetimeobj1.minute)+":"+str(datetimeobj1.second)+"\n\n"+"    Temperature: "+str(round(temperature,2))+" "+tempunit + "\n\n" +"    Humidity: "+str(round(humidity,1))+" "+"%")
+        else:
+            self.statusedit.setPlainText("    SENSOR DISCONNECTED!! ")
 
 
     def counter(self):
         global count
-        count = count + 1
-        if count == 30:
-            exit()
+        if count == 2:
+            count=0
+            self.timer.stop()
+            self.refb.setEnabled(True)
         else:
+            count = count + 1
             self.printvals()
+
+    def refreshtimer(self):
+        self.timer.start(15000)
+        self.counter()
 
 
     def setupUi(self, MainWindow):
@@ -138,6 +150,9 @@ class Ui_MainWindow(object):
         self.refb = QtWidgets.QPushButton(self.centralwidget)
         self.refb.setGeometry(QtCore.QRect(1110, 50, 99, 30))
         self.refb.setObjectName("refb")
+        self.refb.setEnabled(False)
+
+        self.refb.clicked.connect(self.refreshtimer)
         self.humval = QtWidgets.QLineEdit(self.centralwidget)
         self.humval.setGeometry(QtCore.QRect(170, 90, 81, 32))
         self.humval.setObjectName("humval")
@@ -156,9 +171,10 @@ class Ui_MainWindow(object):
         self.ctof = QtWidgets.QPushButton(self.centralwidget)
         self.ctof.setGeometry(QtCore.QRect(130, 420, 101, 30))
         self.ctof.setObjectName("ctof")
+        self.ctof.setCheckable(True)
         self.ctof.clicked.connect(self.changetempunit)
         self.statusedit = QtWidgets.QPlainTextEdit(self.centralwidget)
-        self.statusedit.setGeometry(QtCore.QRect(880, 130, 271, 151))
+        self.statusedit.setGeometry(QtCore.QRect(880, 130, 271, 170))
         self.statusedit.setObjectName("statusedit")
         self.statuslabel = QtWidgets.QLabel(self.centralwidget)
         self.statuslabel.setGeometry(QtCore.QRect(970, 100, 111, 22))
