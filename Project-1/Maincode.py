@@ -16,12 +16,16 @@ import Adafruit_DHT
 from datetime import datetime
 import threading
 from mplwidget import MplWidget
+from mysql import database
+import globals
 
 tempunit = "C"
 count = 0
 humidity = 0.0
 temperature = 0.0
 disconnectflag=0
+
+mydb = database()
 
 class Ui_MainWindow(object):
 
@@ -66,25 +70,32 @@ class Ui_MainWindow(object):
             tempunit=tempunit.replace("F","C")
 
     def plothumgraph(self):
-        print("Humidity MySQL graph")
-        x=range(0,10)
-        y=range(0,20,2)
+        mydb.get_last_ten_humi_values()
+        x=globals.humi_list
+        #y=globals.time_stamp
+        y=range(0,10)
         self.humiditygraph.canvas.ax.plot(x,y)
         self.humiditygraph.canvas.draw()
+        globals.humi_list.clear()
+        globals.time_stamp.clear()
 
     def plottempgraph(self):
-        print("Temperature MySQL graph")
-        x=range(0,10)
-        y=range(0,20,2)
+        mydb.get_last_ten_temp_values()
+        x=globals.temp_list
+        y=range(0,10)
         self.temperaturegraph.canvas.ax.plot(x,y)
         self.temperaturegraph.canvas.draw()
+        globals.temp_list.clear()
+        globals.time_stamp.clear()
 
     def printvals(self):
         global humidity,temperature
         self.sensor()
         if disconnectflag == 0:
             datetimeobj1=datetime.now()
+            formatted_time = datetimeobj1.strftime('%H:%M:%S')
             self.statusedit.setPlainText("    Reading: "+str(count)+"\n\n"+"    Time: "+str(datetimeobj1.hour)+":"+str(datetimeobj1.minute)+":"+str(datetimeobj1.second)+"\n\n"+"    Temperature: "+str(round(temperature,2))+" "+tempunit + "\n\n" +"    Humidity: "+str(round(humidity,1))+" "+"%")
+            mydb.add_values_db(temperature, humidity, formatted_time)
         else:
             self.statusedit.setPlainText("    SENSOR DISCONNECTED!! ")
 
@@ -235,6 +246,7 @@ class Ui_MainWindow(object):
 
 if __name__ == "__main__":
     import sys
+    globals.global_init()
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
