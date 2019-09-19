@@ -40,12 +40,6 @@ class Ui_MainWindow(object):
             disconnectflag=0
             if tempunit == "F":
                 temperature = (temperature * 9)/5 + 32
-                if temperature>self.HTtempscroll.value() or temperature<self.HLtempscroll.value():
-                    self.Alarm.setText("!!ALARM!!")
-                    self.Alarm.text()
-                if humidity>self.HThumscroll.value() or humidity<self.LThumscroll.value():
-                    self.Alarm.setText("!!ALARM!!")
-                    self.Alarm.text()
         else:
             disconnectflag=1
 
@@ -96,6 +90,12 @@ class Ui_MainWindow(object):
             formatted_time = datetimeobj1.strftime('%H:%M:%S')
             self.statusedit.setPlainText("    Reading: "+str(count)+"\n\n"+"    Time: "+str(datetimeobj1.hour)+":"+str(datetimeobj1.minute)+":"+str(datetimeobj1.second)+"\n\n"+"    Temperature: "+str(round(temperature,2))+" "+tempunit + "\n\n" +"    Humidity: "+str(round(humidity,1))+" "+"%")
             mydb.add_values_db(temperature, humidity, formatted_time)
+            if temperature>self.HTtempscroll.value() or temperature<self.LTtempscroll.value() or humidity>self.HThumscroll.value() or humidity<self.LThumscroll.value():
+                self.Alarm.setEnabled(1)
+                self.Alarm.setText("  !!ALARM!!  ")
+                self.Alarm.text()
+            else:
+                self.Alarm.setDisabled(1)
         else:
             self.statusedit.setPlainText("    SENSOR DISCONNECTED!! ")
 
@@ -198,6 +198,7 @@ class Ui_MainWindow(object):
         self.Alarm = QtWidgets.QLineEdit(self.centralwidget)
         self.Alarm.setGeometry(QtCore.QRect(550, 670, 161, 61))
         self.Alarm.setObjectName("Alarm")
+        self.Alarm.setDisabled(1)
         self.time = QtWidgets.QLineEdit(self.centralwidget)
         self.time.setGeometry(QtCore.QRect(300, 40, 113, 32))
         self.time.setObjectName("lineEdit")
