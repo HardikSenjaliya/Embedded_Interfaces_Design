@@ -36,6 +36,12 @@ class Ui_MainWindow(object):
             disconnectflag=0
             if tempunit == "F":
                 temperature = (temperature * 9)/5 + 32
+                if temperature>self.HTtempscroll.value() or temperature<self.HLtempscroll.value():
+                    self.Alarm.setText("!!ALARM!!")
+                    self.Alarm.text()
+                if humidity>self.HThumscroll.value() or humidity<self.LThumscroll.value():
+                    self.Alarm.setText("!!ALARM!!")
+                    self.Alarm.text()
         else:
             disconnectflag=1
 
@@ -55,6 +61,7 @@ class Ui_MainWindow(object):
         global tempunit
         if tempunit == "C":
             tempunit=tempunit.replace("C","F")
+            self.ctof.setText("F To C")
         else:
             tempunit=tempunit.replace("F","C")
 
@@ -118,27 +125,37 @@ class Ui_MainWindow(object):
         self.templabel.setObjectName("templabel")
         self.HTtempscroll = QtWidgets.QDoubleSpinBox(self.centralwidget)
         self.HTtempscroll.setGeometry(QtCore.QRect(180, 690, 71, 32))
-        self.HTtempscroll.setStyleSheet("font: 75 italic 12pt \"PibotoLt\";\n"
-"font: 12pt \"PibotoLt\";")
         self.HTtempscroll.setObjectName("HTtempscroll")
+        self.HTtempscroll.setMaximum(99.00)
+        self.HTtempscroll.setMinimum(0.00)
+        self.HTtempscroll.setValue(32.00)
         self.LTtempscroll = QtWidgets.QDoubleSpinBox(self.centralwidget)
         self.LTtempscroll.setGeometry(QtCore.QRect(180, 750, 71, 32))
         self.LTtempscroll.setObjectName("LTtempscroll")
+        self.LTtempscroll.setMaximum(99.00)
+        self.LTtempscroll.setMinimum(0.00)
+        self.LTtempscroll.setValue(22.00)
         self.HTtemp = QtWidgets.QLabel(self.centralwidget)
         self.HTtemp.setGeometry(QtCore.QRect(60, 690, 111, 22))
         self.HTtemp.setObjectName("HTtemp")
         self.LTtemp = QtWidgets.QLabel(self.centralwidget)
         self.LTtemp.setGeometry(QtCore.QRect(60, 750, 111, 22))
         self.LTtemp.setObjectName("LTtemp")
-        self.LTtemp_2 = QtWidgets.QLabel(self.centralwidget)
-        self.LTtemp_2.setGeometry(QtCore.QRect(980, 750, 111, 22))
-        self.LTtemp_2.setObjectName("LTtemp_2")
+        self.LThum = QtWidgets.QLabel(self.centralwidget)
+        self.LThum.setGeometry(QtCore.QRect(980, 750, 111, 22))
+        self.LThum.setObjectName("LThum")
         self.HThumscroll = QtWidgets.QDoubleSpinBox(self.centralwidget)
         self.HThumscroll.setGeometry(QtCore.QRect(1100, 690, 71, 32))
         self.HThumscroll.setObjectName("HThumscroll")
+        self.HThumscroll.setMaximum(99.00)
+        self.HThumscroll.setMinimum(0.00)
+        self.HThumscroll.setValue(40.00)
         self.LThumscroll = QtWidgets.QDoubleSpinBox(self.centralwidget)
         self.LThumscroll.setGeometry(QtCore.QRect(1100, 750, 71, 32))
         self.LThumscroll.setObjectName("LThumscroll")
+        self.LThumscroll.setMaximum(99.00)
+        self.LThumscroll.setMinimum(0.00)
+        self.LThumscroll.setValue(20.00)
         self.HThum = QtWidgets.QLabel(self.centralwidget)
         self.HThum.setGeometry(QtCore.QRect(980, 690, 111, 22))
         self.HThum.setObjectName("HThum")
@@ -179,10 +196,9 @@ class Ui_MainWindow(object):
         self.ctof = QtWidgets.QPushButton(self.centralwidget)
         self.ctof.setGeometry(QtCore.QRect(230, 610, 101, 30))
         self.ctof.setObjectName("ctof")
-        self.ctof.setCheckable(True)
         self.ctof.clicked.connect(self.changetempunit)
         self.statusedit = QtWidgets.QPlainTextEdit(self.centralwidget)
-        self.statusedit.setGeometry(QtCore.QRect(740, 60, 271, 151))
+        self.statusedit.setGeometry(QtCore.QRect(740, 60, 271, 170))
         self.statusedit.setObjectName("statusedit")
         self.statuslabel = QtWidgets.QLabel(self.centralwidget)
         self.statuslabel.setGeometry(QtCore.QRect(820, 20, 111, 22))
@@ -207,13 +223,13 @@ class Ui_MainWindow(object):
         self.templabel.setText(_translate("MainWindow", "Temperature :"))
         self.HTtemp.setText(_translate("MainWindow", "High Threshold:"))
         self.LTtemp.setText(_translate("MainWindow", "Low Threshold :"))
-        self.LTtemp_2.setText(_translate("MainWindow", "Low Threshold :"))
+        self.LThum.setText(_translate("MainWindow", "Low Threshold :"))
         self.HThum.setText(_translate("MainWindow", "High Threshold:"))
         self.tempbutton.setText(_translate("MainWindow", "Temperature"))
         self.humbutton.setText(_translate("MainWindow", "Humidity"))
         self.refb.setText(_translate("MainWindow", "Refresh"))
         self.label.setText(_translate("MainWindow", "Time :"))
-        self.ctof.setText(_translate("MainWindow", "Toggle Unit"))
+        self.ctof.setText(_translate("MainWindow", "C To F"))
         self.statuslabel.setText(_translate("MainWindow", "Sensor Status :"))
 
 
