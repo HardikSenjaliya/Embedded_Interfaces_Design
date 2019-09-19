@@ -15,6 +15,7 @@ from PyQt5.QtCore import pyqtSlot
 import Adafruit_DHT
 from datetime import datetime
 import threading
+from mplwidget import MplWidget
 
 tempunit = "C"
 count = 0
@@ -57,11 +58,19 @@ class Ui_MainWindow(object):
         else:
             tempunit=tempunit.replace("F","C")
 
-    def humiditygraph(self):
+    def plothumgraph(self):
         print("Humidity MySQL graph")
+        x=range(0,10)
+        y=range(0,20,2)
+        self.humiditygraph.canvas.ax.plot(x,y)
+        self.humiditygraph.canvas.draw()
 
-    def tempgraph(self):
+    def plottempgraph(self):
         print("Temperature MySQL graph")
+        x=range(0,10)
+        y=range(0,20,2)
+        self.temperaturegraph.canvas.ax.plot(x,y)
+        self.temperaturegraph.canvas.draw()
 
     def printvals(self):
         global humidity,temperature
@@ -136,22 +145,21 @@ class Ui_MainWindow(object):
         self.tempbutton = QtWidgets.QPushButton(self.centralwidget)
         self.tempbutton.setGeometry(QtCore.QRect(130, 350, 106, 30))
         self.tempbutton.setObjectName("tempbutton")
-        self.tempbutton.clicked.connect(self.tempgraph)
+        self.tempbutton.clicked.connect(self.plottempgraph)
         self.humbutton = QtWidgets.QPushButton(self.centralwidget)
         self.humbutton.setGeometry(QtCore.QRect(1040, 360, 99, 30))
         self.humbutton.setObjectName("humbutton")
-        self.humbutton.clicked.connect(self.humiditygraph)
-        self.Temperaturegraph = QtWidgets.QGraphicsView(self.centralwidget)
-        self.Temperaturegraph.setGeometry(QtCore.QRect(490, 50, 256, 192))
-        self.Temperaturegraph.setObjectName("Temperaturegraph")
-        self.Humiditygraph = QtWidgets.QGraphicsView(self.centralwidget)
-        self.Humiditygraph.setGeometry(QtCore.QRect(490, 310, 256, 192))
-        self.Humiditygraph.setObjectName("Humiditygraph")
+        self.humbutton.clicked.connect(self.plothumgraph)
+        self.temperaturegraph = MplWidget(self.centralwidget)
+        self.temperaturegraph.setGeometry(QtCore.QRect(380, 40, 481, 231))
+        self.temperaturegraph.setObjectName("temperaturegraph")
+        self.humiditygraph = MplWidget(self.centralwidget)
+        self.humiditygraph.setGeometry(QtCore.QRect(380, 300, 481, 261))
+        self.humiditygraph.setObjectName("humiditygraph")
         self.refb = QtWidgets.QPushButton(self.centralwidget)
         self.refb.setGeometry(QtCore.QRect(1110, 50, 99, 30))
         self.refb.setObjectName("refb")
         self.refb.setEnabled(False)
-
         self.refb.clicked.connect(self.refreshtimer)
         self.humval = QtWidgets.QLineEdit(self.centralwidget)
         self.humval.setGeometry(QtCore.QRect(170, 90, 81, 32))
