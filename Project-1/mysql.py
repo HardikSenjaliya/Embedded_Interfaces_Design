@@ -20,6 +20,7 @@ mycur = eidDB.cursor()
 #mycur.execute("DROP TABLE sensor_values")
 #mycur.execute("CREATE TABLE sensor_values (id INT(20) NOT NULL AUTO_INCREMENT PRIMARY KEY, timestamp VARCHAR(20), temperature FLOAT(20), humidity FLOAT(20))")
 
+
 class database:
 
     def add_values_db(self, temperature, humidity, formatted_time):
@@ -39,16 +40,27 @@ class database:
                 print (row[0], " ", row[1], " ", row[2], " ", row[3])
                 
                 
-    def get_last_ten_temp_values(self):
-        mycur.execute("SELECT * FROM sensor_values LIMIT 10 OFFSET 20")
+    def get_last_ten_temp_values(self, index):
+        if index <= 10:
+            index = 0
+        else:
+            index = index - 10
+        fetch = (index,)
+        mycur.execute("SELECT * FROM sensor_values LIMIT 10 OFFSET %s", fetch)
         for row in mycur.fetchall():
                 print (row[0], " ", row[1], " ", row[2], " ", row[3])
                 globals.temp_list.append(row[2])
                 globals.time_stamp.append(row[1])
                 
-    def get_last_ten_humi_values(self):
-        mycur.execute("SELECT * FROM sensor_values LIMIT 10 OFFSET 20")
+    def get_last_ten_humi_values(self, index):
+        if index <= 10:
+            index = 0
+        else:
+            index = index - 10
+        fetch = (index,)
+        mycur.execute("SELECT * FROM sensor_values LIMIT 10 OFFSET %s", fetch)
         for row in mycur.fetchall():
+                print (row[0], " ", row[1], " ", row[2], " ", row[3])
                 globals.humi_list.append(row[3])
                 globals.time_stamp.append(row[1])
 
@@ -64,10 +76,13 @@ for i in range(30):
     timestamp = datetime.now()
     formattedtime = timestamp.strftime('%H:%M:%S')
     db1.add_values_db(10.20, 12.21, formattedtime)
+    
+
+#globals.global_init()
 
 #db1.get_values_db()
 #db1.get_last_ten_values()
-#db1.get_last_ten_temp_values()
+#db1.get_last_ten_temp_values(5)
 #db1.get_last_ten_humi_values()
 #db1.delete_values_db()
 #

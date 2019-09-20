@@ -64,19 +64,20 @@ class Ui_MainWindow(object):
             tempunit=tempunit.replace("F","C")
 
     def plothumgraph(self):
-        mydb.get_last_ten_humi_values()
-        x=globals.humi_list
-        #y=globals.time_stamp
-        y=range(0,10)
+        self.humiditygraph.canvas.ax.cla()
+        mydb.get_last_ten_humi_values(count)
+        y=globals.humi_list
+        x=range(0,10)
         self.humiditygraph.canvas.ax.plot(x,y)
         self.humiditygraph.canvas.draw()
         globals.humi_list.clear()
         globals.time_stamp.clear()
 
     def plottempgraph(self):
-        mydb.get_last_ten_temp_values()
-        x=globals.temp_list
-        y=range(0,10)
+        self.temperaturegraph.canvas.ax.cla()
+        mydb.get_last_ten_temp_values(count)
+        y=globals.temp_list
+        x=range(0,10)
         self.temperaturegraph.canvas.ax.plot(x,y)
         self.temperaturegraph.canvas.draw()
         globals.temp_list.clear()
@@ -102,7 +103,7 @@ class Ui_MainWindow(object):
 
     def counter(self):
         global count
-        if count == 2:
+        if count == 30:
             count=0
             self.timer.stop()
             self.refb.setEnabled(True)
@@ -248,6 +249,7 @@ class Ui_MainWindow(object):
 if __name__ == "__main__":
     import sys
     globals.global_init()
+    mydb.delete_values_db()
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
