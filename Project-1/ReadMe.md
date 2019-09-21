@@ -5,7 +5,7 @@
 
 ###### This project aims to educate us with MySql and its database operations and also matplotlib, where the DHT22 sensor interfaced gave humidity and temperature which shall be fed into the database and then fetched upon request to plot a graph. The system also gives real-time values and the user can opt to refresh the GUI once 30 reading have been taken.
 
-#### #Installation Instructions and Description:
+##### Installation Instructions and Description:
 
 1. Clone the git repository from the main github like provided and go to path - Embedded_Interfaces_Design->Project-1
 2. For connecting the hardware, place the DHT22 sensor on a breadboard and connect its Pins 1,3 and 4 to RPi3 GPIO 1, 7 and 6 respectively.
