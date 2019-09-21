@@ -1,5 +1,9 @@
 #!/usr/bin/python3
 
+#Authors: Hardik Senjaliya and Isha Sawant
+#This file is for generating a mysqldb and contains all the funtions necessary for plotting the 10-values in the graph
+
+
 #import mysql.connector
 import MySQLdb
 import globals
@@ -23,23 +27,26 @@ mycur = eidDB.cursor()
 
 class database:
 
+    #add values of temperature and humidity to the database
     def add_values_db(self, temperature, humidity, formatted_time):
         insert_query = "INSERT INTO sensor_values (temperature, humidity, timestamp) VALUES (%s, %s, %s)"
         args = (temperature, humidity, formatted_time)
         mycur.execute(insert_query, args)
         eidDB.commit()
-        
+
+
     def get_values_db(self):
         mycur.execute("SELECT * FROM sensor_values")
         for row in mycur.fetchall() :
                 print (row[0], " ", row[1], " ", row[2], " ", row[3])
 
+    #print values once the plot is displayed
     def get_last_ten_values(self):
         mycur.execute("SELECT * FROM sensor_values LIMIT 10 OFFSET 20")
         for row in mycur.fetchall():
                 print (row[0], " ", row[1], " ", row[2], " ", row[3])
-                
-                
+
+    #fetch 10 temp values for the plot
     def get_last_ten_temp_values(self, index):
         if index <= 10:
             index = 0
@@ -51,7 +58,8 @@ class database:
                 print (row[0], " ", row[1], " ", row[2], " ", row[3])
                 globals.temp_list.append(row[2])
                 globals.time_stamp.append(row[1])
-                
+
+    #fetch 10 humidity values for the plot
     def get_last_ten_humi_values(self, index):
         if index <= 10:
             index = 0
@@ -76,7 +84,7 @@ for i in range(30):
     timestamp = datetime.now()
     formattedtime = timestamp.strftime('%H:%M:%S')
     db1.add_values_db(10.20, 12.21, formattedtime)
-    
+
 
 #globals.global_init()
 

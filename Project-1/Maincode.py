@@ -8,6 +8,10 @@
 #
 # WARNING! All changes made in this file will be lost!
 
+#Authors: Isha Sawant and Hardik Senjaliya
+#This .py file is generated from the UI and programmed as the driver class of the code
+
+#files and libraries to be included
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QTimer, QTime
@@ -19,6 +23,8 @@ from mplwidget import MplWidget
 from mysql import database
 import globals
 
+#global variables
+
 tempunit = "C"
 count = 0
 humidity = 0.0
@@ -27,8 +33,10 @@ disconnectflag=0
 
 mydb = database()
 
+#main class
 class Ui_MainWindow(object):
 
+    #Function to get values from DHT22
     def sensor(self):
         global disconnectflag
         global humidity,temperature
@@ -43,6 +51,7 @@ class Ui_MainWindow(object):
         else:
             disconnectflag=1
 
+    #Function to print the real time values when Get Values button is pressed
     def Getvals(self):
         global humidity,temperature
         self.sensor()
@@ -54,15 +63,20 @@ class Ui_MainWindow(object):
         self.humval.setText("    "+str(round(humidity,1))+" "+"%")
         self.humval.text()
 
-
+    #Change the unit from Celcius to Fahrenheit or vice-versa
     def changetempunit(self):
         global tempunit
         if tempunit == "C":
             tempunit=tempunit.replace("C","F")
             self.ctof.setText("F To C")
+            self.HTtempscroll.setValue( (self.HTtempscroll.value()*9)/5 +32)
+            self.LTtempscroll.setValue( (self.LTtempscroll.value()*9)/5 +32)
         else:
             tempunit=tempunit.replace("F","C")
+            self.HTtempscroll.setValue(((self.HTtempscroll.value()-32)*5)/9)
+            self.LTtempscroll.setValue(((self.LTtempscroll.value()-32)*5)/9)
 
+    #Plot the graph for last ten values of humidity
     def plothumgraph(self):
         self.humiditygraph.canvas.ax.cla()
         mydb.get_last_ten_humi_values(count)
@@ -73,6 +87,7 @@ class Ui_MainWindow(object):
         globals.humi_list.clear()
         globals.time_stamp.clear()
 
+    #Plot the graph for last ten values of temperature
     def plottempgraph(self):
         self.temperaturegraph.canvas.ax.cla()
         mydb.get_last_ten_temp_values(count)
@@ -83,8 +98,12 @@ class Ui_MainWindow(object):
         globals.temp_list.clear()
         globals.time_stamp.clear()
 
+    #Print timestamp, temp and humidity on the status line and report if sensor is disconnected
     def printvals(self):
         global humidity,temperature
+        self.Alarm.setText("\n     ")
+        self.Alarm.text()
+        self.Alarm.setDisabled(1)
         self.sensor()
         if disconnectflag == 0:
             datetimeobj1=datetime.now()
@@ -93,29 +112,39 @@ class Ui_MainWindow(object):
             mydb.add_values_db(temperature, humidity, formatted_time)
             if temperature>self.HTtempscroll.value() or temperature<self.LTtempscroll.value() or humidity>self.HThumscroll.value() or humidity<self.LThumscroll.value():
                 self.Alarm.setEnabled(1)
-                self.Alarm.setText("  !!ALARM!!  ")
+                self.Alarm.setText("\n        !!ALARM!! ")
                 self.Alarm.text()
-            else:
-                self.Alarm.setDisabled(1)
+            if self.HThumscroll.value()<=self.LThumscroll.value():
+                self.Alarm.setEnabled(1)
+                self.Alarm.setText("\nCheck Temp Threshold")
+                self.Alarm.text()
+
+            if  self.HTtempscroll.value()<=self.LTtempscroll.value():
+                self.Alarm.setEnabled(1)
+                self.Alarm.setText("\nCheck Humidity Threshold")
+                self.Alarm.text()
         else:
             self.statusedit.setPlainText("    SENSOR DISCONNECTED!! ")
 
-
+    #Counts to 30 for timer to stop
     def counter(self):
         global count
         if count == 30:
             count=0
             self.timer.stop()
             self.refb.setEnabled(True)
+            mydb.delete_values_db()
+            #exit
         else:
             count = count + 1
             self.printvals()
 
+    #refresh the timer to re-start the timer
     def refreshtimer(self):
         self.timer.start(15000)
         self.counter()
 
-
+    #setup the GUI
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("SensorGUI")
         MainWindow.resize(1287, 819)
@@ -161,13 +190,13 @@ class Ui_MainWindow(object):
         self.HThumscroll.setObjectName("HThumscroll")
         self.HThumscroll.setMaximum(99.00)
         self.HThumscroll.setMinimum(0.00)
-        self.HThumscroll.setValue(40.00)
+        self.HThumscroll.setValue(35.00)
         self.LThumscroll = QtWidgets.QDoubleSpinBox(self.centralwidget)
         self.LThumscroll.setGeometry(QtCore.QRect(1100, 750, 71, 32))
         self.LThumscroll.setObjectName("LThumscroll")
         self.LThumscroll.setMaximum(99.00)
         self.LThumscroll.setMinimum(0.00)
-        self.LThumscroll.setValue(20.00)
+        self.LThumscroll.setValue(10.00)
         self.HThum = QtWidgets.QLabel(self.centralwidget)
         self.HThum.setGeometry(QtCore.QRect(980, 690, 111, 22))
         self.HThum.setObjectName("HThum")
@@ -199,10 +228,10 @@ class Ui_MainWindow(object):
         self.Alarm = QtWidgets.QLineEdit(self.centralwidget)
         self.Alarm.setGeometry(QtCore.QRect(550, 670, 161, 61))
         self.Alarm.setObjectName("Alarm")
-        self.Alarm.setDisabled(1)
+        self.Alarm.setEnabled(0)
         self.time = QtWidgets.QLineEdit(self.centralwidget)
         self.time.setGeometry(QtCore.QRect(300, 40, 113, 32))
-        self.time.setObjectName("lineEdit")
+        self.time.setObjectName("time")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(190, 50, 68, 22))
         self.label.setObjectName("label")

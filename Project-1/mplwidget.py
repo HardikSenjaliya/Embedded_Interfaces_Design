@@ -1,3 +1,6 @@
+#Authors: Hardik Senjaliya and Isha Sawant
+#This file is to configure the custom widget for the matplotlib graph
+
 # Imports
 from PyQt5 import QtWidgets
 from matplotlib.figure import Figure

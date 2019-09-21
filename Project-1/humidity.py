@@ -1,5 +1,8 @@
 #!/usr/bin/python3
 
+#Code referenced from https://pimylifeup.com/raspberry-pi-humidity-sensor-dht22/
+#Used to poll out values from DHT22 for testing the sensor
+
 import Adafruit_DHT
 
 DHT_SENSOR = Adafruit_DHT.DHT22
