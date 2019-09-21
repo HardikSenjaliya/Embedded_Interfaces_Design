@@ -22,6 +22,8 @@ import threading
 from mplwidget import MplWidget
 from mysql import database
 import globals
+import sys
+import os
 
 #global variables
 
@@ -112,16 +114,16 @@ class Ui_MainWindow(object):
             mydb.add_values_db(temperature, humidity, formatted_time)
             if temperature>self.HTtempscroll.value() or temperature<self.LTtempscroll.value() or humidity>self.HThumscroll.value() or humidity<self.LThumscroll.value():
                 self.Alarm.setEnabled(1)
-                self.Alarm.setText("\n        !!ALARM!! ")
+                self.Alarm.setText("\n            !!ALARM!! ")
                 self.Alarm.text()
             if self.HThumscroll.value()<=self.LThumscroll.value():
                 self.Alarm.setEnabled(1)
-                self.Alarm.setText("\nCheck Temp Threshold")
+                self.Alarm.setText("\n Check Humidity Threshold")
                 self.Alarm.text()
 
             if  self.HTtempscroll.value()<=self.LTtempscroll.value():
                 self.Alarm.setEnabled(1)
-                self.Alarm.setText("\nCheck Humidity Threshold")
+                self.Alarm.setText("\n Check Temperature Threshold")
                 self.Alarm.text()
         else:
             self.statusedit.setPlainText("    SENSOR DISCONNECTED!! ")
@@ -133,7 +135,6 @@ class Ui_MainWindow(object):
             count=0
             self.timer.stop()
             self.refb.setEnabled(True)
-            mydb.delete_values_db()
             #exit
         else:
             count = count + 1
@@ -141,8 +142,9 @@ class Ui_MainWindow(object):
 
     #refresh the timer to re-start the timer
     def refreshtimer(self):
-        self.timer.start(15000)
-        self.counter()
+        mydb.printall(30)
+        mydb.delete_values_db()
+        os.execl(sys.executable, sys.executable, * sys.argv)
 
     #setup the GUI
     def setupUi(self, MainWindow):
@@ -226,7 +228,7 @@ class Ui_MainWindow(object):
         self.tempval.setGeometry(QtCore.QRect(300, 120, 91, 32))
         self.tempval.setObjectName("tempval")
         self.Alarm = QtWidgets.QLineEdit(self.centralwidget)
-        self.Alarm.setGeometry(QtCore.QRect(550, 670, 161, 61))
+        self.Alarm.setGeometry(QtCore.QRect(550, 670, 230, 61))
         self.Alarm.setObjectName("Alarm")
         self.Alarm.setEnabled(0)
         self.time = QtWidgets.QLineEdit(self.centralwidget)

@@ -72,6 +72,19 @@ class database:
                 globals.humi_list.append(row[3])
                 globals.time_stamp.append(row[1])
 
+    #print all values after 30 readings
+    def printall(self,index):
+        index=0
+        fetch = (index,)
+        print("=================================================================")
+        mycur.execute("SELECT * FROM sensor_values LIMIT 30 OFFSET %s", fetch)
+        for row in mycur.fetchall():
+                print (row[0], " ", row[1], " ", row[2], " ", row[3])
+                globals.temp_list.append(row[2])
+                globals.humi_list.append(row[3])
+                globals.time_stamp.append(row[1])
+        print("=================================================================")
+
     def delete_values_db(self):
         mycur.execute("DELETE FROM sensor_values")
         eidDB.commit()
