@@ -12,8 +12,8 @@
    Also connect a 10k resistor between pins 1 and 2 of the sensor.[1]
 3. Install python3 and other libraries for mysql to function.
 4. The project contains one driver file *Maincode.py* which shall run on the command ./Maincode.py and hence initiate the GUI.
-   It contains all the primary functions for getting the real-time sensor values, printing on the status line, plotting the graph and setting
-   thresholds for both temperature and humidity.
+   It contains all the primary functions for getting the real-time sensor values, printing on the status line, plotting the graph and setting thresholds for both temperature and humidity. Another file is *mysql.py* which deals with the database and pushes values into the matplotlib widget for the temperature and humidity graphs.
+5. The GUI reports if the sensor is disconnected in between of execution (after 15seconds when the sensor function is evoked), the corresponding readings get zeroed values written into the lists and then if the sensor is connected again, they shall resume from the next reading.
    
    
 ##### Project Work:
@@ -31,6 +31,8 @@ and matplotlib functions for fetching the values and displaying them on request 
 
 1. Added an extra condition for the Alarm, where the humidity or temperature threshold entered cannot converge into each other, if so, 
    displays a different error message to notify the user.
-2. A Refresh button for the user to restart the GUI once the database values have been displayed on the terminal and the status line.
+2. Extra credit of changing the temperature unit has also been added as a functionality, a button changes its title from *C-To-F* to *F-To-C* whenever pressed and the GUI on the frontend entirely switches the unit with upcoming values.
+3. The plots' titles, x-axis and y-axis have been labelled and shall be controlled by a button for getting last 10 values, and respond to the C-To-F or F-To-C buttons as well. 
+4. A *Refresh button* for the user to restart the GUI once all the 30 readings have been completed and database values have been displayed on the terminal and the status line.
 
 
