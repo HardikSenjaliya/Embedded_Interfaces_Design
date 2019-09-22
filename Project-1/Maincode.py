@@ -98,11 +98,11 @@ class Ui_MainWindow(object):
             self.Alarm.setText("\n Wait for 10 Readings")
             self.Alarm.text()
             return
-        
+
         self.humiditygraph.canvas.ax.cla()
         mydb.get_last_ten_humi_values(count)
         y=globals.humi_list
-        x=range(0,10)  
+        x=range(0,10)
         self.humiditygraph.canvas.ax.set_title('Humidity Plot')
         self.humiditygraph.canvas.ax.set_xlabel('Readings Index')
         self.humiditygraph.canvas.ax.set_ylabel('Humidity')
@@ -118,7 +118,7 @@ class Ui_MainWindow(object):
             self.Alarm.setText("\n Wait for 10 Readings")
             self.Alarm.text()
             return
-        
+
         self.temperaturegraph.canvas.ax.cla()
         mydb.get_last_ten_temp_values(count)
         if tempunit == "C":
@@ -132,7 +132,7 @@ class Ui_MainWindow(object):
 
         self.temperaturegraph.canvas.ax.set_title('Temperature Plot')
         self.temperaturegraph.canvas.ax.set_xlabel('Readings Index')
-        
+
         self.temperaturegraph.canvas.ax.plot(x,y)
         self.temperaturegraph.canvas.draw()
         globals.tempc_list.clear()
@@ -253,11 +253,11 @@ class Ui_MainWindow(object):
         self.humbutton.setObjectName("humbutton")
         self.humbutton.clicked.connect(self.plothumgraph)
         self.temperaturegraph = MplWidget('Temperature Plot', 'Reading', 'Temperature', self.centralwidget)
-        self.temperaturegraph.setGeometry(QtCore.QRect(20, 230, 611, 400))
+        self.temperaturegraph.setGeometry(QtCore.QRect(5, 230, 631, 400))
         self.temperaturegraph.setObjectName("temperaturegraph")
 
         self.humiditygraph = MplWidget('Humidity Plot', 'Reading', 'Humidity', self.centralwidget)
-        self.humiditygraph.setGeometry(QtCore.QRect(710, 230, 561, 400))
+        self.humiditygraph.setGeometry(QtCore.QRect(675, 230, 571, 400))
         self.humiditygraph.setObjectName("humiditygraph")
 
         self.refb = QtWidgets.QPushButton(self.centralwidget)
