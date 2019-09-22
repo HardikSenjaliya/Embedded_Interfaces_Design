@@ -93,10 +93,19 @@ class Ui_MainWindow(object):
 
     #Plot the graph for last ten values of humidity
     def plothumgraph(self):
+        if count < 10:
+            self.Alarm.setEnabled(1)
+            self.Alarm.setText("\n Wait for 10 Readings")
+            self.Alarm.text()
+            return
+        
         self.humiditygraph.canvas.ax.cla()
         mydb.get_last_ten_humi_values(count)
         y=globals.humi_list
-        x=range(0,10)
+        x=range(0,10)  
+        self.humiditygraph.canvas.ax.set_title('Humidity Plot')
+        self.humiditygraph.canvas.ax.set_xlabel('Readings Index')
+        self.humiditygraph.canvas.ax.set_ylabel('Humidity')
         self.humiditygraph.canvas.ax.plot(x,y)
         self.humiditygraph.canvas.draw()
         globals.humi_list.clear()
@@ -104,15 +113,26 @@ class Ui_MainWindow(object):
 
     #Plot the graph for last ten values of temperature
     def plottempgraph(self):
+        if count < 10:
+            self.Alarm.setEnabled(1)
+            self.Alarm.setText("\n Wait for 10 Readings")
+            self.Alarm.text()
+            return
+        
         self.temperaturegraph.canvas.ax.cla()
         mydb.get_last_ten_temp_values(count)
         if tempunit == "C":
             y=globals.tempc_list
             x=range(0,10)
+            self.temperaturegraph.canvas.ax.set_ylabel('Temperature (C)')
         if tempunit == "F":
             y=globals.tempf_list
             x=range(0,10)
+            self.temperaturegraph.canvas.ax.set_ylabel('Temperature (F)')
 
+        self.temperaturegraph.canvas.ax.set_title('Temperature Plot')
+        self.temperaturegraph.canvas.ax.set_xlabel('Readings Index')
+        
         self.temperaturegraph.canvas.ax.plot(x,y)
         self.temperaturegraph.canvas.draw()
         globals.tempc_list.clear()

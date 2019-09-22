@@ -1,5 +1,6 @@
 #Authors: Hardik Senjaliya and Isha Sawant
 #This file is to configure the custom widget for the matplotlib graph
+#Reference: Matplotlib for Python Developers by Sandro Tosi and various Solutions from Stackoverflow
 
 # Imports
 from PyQt5 import QtWidgets
