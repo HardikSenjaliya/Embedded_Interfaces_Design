@@ -4,7 +4,8 @@
 #This file contains the global arrays for the database
 
 def global_init():
-    global temp_list, humi_list, time_stamp
-    temp_list = []
+    global tempc_list, tempf_list, humi_list, time_stamp
+    tempc_list = []
+    tempf_list=[]
     humi_list = []
     time_stamp = []

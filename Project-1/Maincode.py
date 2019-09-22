@@ -32,6 +32,8 @@ count = 0
 humidity = 0.0
 temperature = 0.0
 disconnectflag=0
+tempc = 0.0
+tempf = 0.0
 
 mydb = database()
 
@@ -41,21 +43,31 @@ class Ui_MainWindow(object):
     #Function to get values from DHT22
     def sensor(self):
         global disconnectflag
-        global humidity,temperature
+        global humidity,temperature,tempc,tempf
         DHT_SENSOR = Adafruit_DHT.DHT22
         DHT_PIN = 4
-        humidity, temperature = Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)
+
+        for i in range(1,5):
+            humidity, temperature = Adafruit_DHT.read(DHT_SENSOR, DHT_PIN)
+            if humidity is not None and temperature is not None:
+                break
 
         if humidity is not None and temperature is not None:
             disconnectflag=0
+            tempc=round(temperature,2)
+            tempf=(tempc * 9)/5 + 32
             if tempunit == "F":
                 temperature = (temperature * 9)/5 + 32
         else:
+            temperature=0.00
+            humidity=0.0
+            tempc=0.0
+            tempf=0.0
             disconnectflag=1
 
     #Function to print the real time values when Get Values button is pressed
     def Getvals(self):
-        global humidity,temperature
+        global humidity,temperature,tempc,tempf
         self.sensor()
         datetimeobj=datetime.now()
         self.time.setText("    "+str(datetimeobj.hour)+":"+str(datetimeobj.minute)+":"+str(datetimeobj.second))
@@ -74,6 +86,7 @@ class Ui_MainWindow(object):
             self.HTtempscroll.setValue( (self.HTtempscroll.value()*9)/5 +32)
             self.LTtempscroll.setValue( (self.LTtempscroll.value()*9)/5 +32)
         else:
+            self.ctof.setText("C To F")
             tempunit=tempunit.replace("F","C")
             self.HTtempscroll.setValue(((self.HTtempscroll.value()-32)*5)/9)
             self.LTtempscroll.setValue(((self.LTtempscroll.value()-32)*5)/9)
@@ -93,25 +106,33 @@ class Ui_MainWindow(object):
     def plottempgraph(self):
         self.temperaturegraph.canvas.ax.cla()
         mydb.get_last_ten_temp_values(count)
-        y=globals.temp_list
-        x=range(0,10)
+        if tempunit == "C":
+            y=globals.tempc_list
+            x=range(0,10)
+        if tempunit == "F":
+            y=globals.tempf_list
+            x=range(0,10)
+
         self.temperaturegraph.canvas.ax.plot(x,y)
         self.temperaturegraph.canvas.draw()
-        globals.temp_list.clear()
+        globals.tempc_list.clear()
+        globals.tempf_list.clear()
         globals.time_stamp.clear()
 
     #Print timestamp, temp and humidity on the status line and report if sensor is disconnected
     def printvals(self):
-        global humidity,temperature
+        global humidity,temperature,tempc,tempf
         self.Alarm.setText("\n     ")
         self.Alarm.text()
         self.Alarm.setDisabled(1)
         self.sensor()
+        datetimeobj1=datetime.now()
+        formatted_time = datetimeobj1.strftime('%H:%M:%S')
         if disconnectflag == 0:
-            datetimeobj1=datetime.now()
-            formatted_time = datetimeobj1.strftime('%H:%M:%S')
             self.statusedit.setPlainText("    Reading: "+str(count)+"\n\n"+"    Time: "+str(datetimeobj1.hour)+":"+str(datetimeobj1.minute)+":"+str(datetimeobj1.second)+"\n\n"+"    Temperature: "+str(round(temperature,2))+" "+tempunit + "\n\n" +"    Humidity: "+str(round(humidity,1))+" "+"%")
-            mydb.add_values_db(temperature, humidity, formatted_time)
+
+            mydb.add_values_db(tempc, tempf, humidity, formatted_time)
+
             if temperature>self.HTtempscroll.value() or temperature<self.LTtempscroll.value() or humidity>self.HThumscroll.value() or humidity<self.LThumscroll.value():
                 self.Alarm.setEnabled(1)
                 self.Alarm.setText("\n            !!ALARM!! ")
@@ -126,7 +147,8 @@ class Ui_MainWindow(object):
                 self.Alarm.setText("\n Check Temperature Threshold")
                 self.Alarm.text()
         else:
-            self.statusedit.setPlainText("    SENSOR DISCONNECTED!! ")
+            mydb.add_values_db(tempc, tempf, humidity, formatted_time)
+            self.statusedit.setPlainText("\n\n    SENSOR DISCONNECTED!! ")
 
     #Counts to 30 for timer to stop
     def counter(self):
@@ -203,19 +225,21 @@ class Ui_MainWindow(object):
         self.HThum.setGeometry(QtCore.QRect(980, 690, 111, 22))
         self.HThum.setObjectName("HThum")
         self.tempbutton = QtWidgets.QPushButton(self.centralwidget)
-        self.tempbutton.setGeometry(QtCore.QRect(40, 610, 106, 30))
+        self.tempbutton.setGeometry(QtCore.QRect(40, 640, 106, 30))
         self.tempbutton.setObjectName("tempbutton")
         self.tempbutton.clicked.connect(self.plottempgraph)
         self.humbutton = QtWidgets.QPushButton(self.centralwidget)
-        self.humbutton.setGeometry(QtCore.QRect(1030, 620, 99, 30))
+        self.humbutton.setGeometry(QtCore.QRect(1030, 640, 99, 30))
         self.humbutton.setObjectName("humbutton")
         self.humbutton.clicked.connect(self.plothumgraph)
-        self.temperaturegraph = MplWidget(self.centralwidget)
-        self.temperaturegraph.setGeometry(QtCore.QRect(20, 269, 611, 311))
+        self.temperaturegraph = MplWidget('Temperature Plot', 'Reading', 'Temperature', self.centralwidget)
+        self.temperaturegraph.setGeometry(QtCore.QRect(20, 230, 611, 400))
         self.temperaturegraph.setObjectName("temperaturegraph")
-        self.humiditygraph = MplWidget(self.centralwidget)
-        self.humiditygraph.setGeometry(QtCore.QRect(710, 270, 561, 311))
+
+        self.humiditygraph = MplWidget('Humidity Plot', 'Reading', 'Humidity', self.centralwidget)
+        self.humiditygraph.setGeometry(QtCore.QRect(710, 230, 561, 400))
         self.humiditygraph.setObjectName("humiditygraph")
+
         self.refb = QtWidgets.QPushButton(self.centralwidget)
         self.refb.setGeometry(QtCore.QRect(1080, 120, 99, 30))
         self.refb.setObjectName("refb")
@@ -238,11 +262,11 @@ class Ui_MainWindow(object):
         self.label.setGeometry(QtCore.QRect(190, 50, 68, 22))
         self.label.setObjectName("label")
         self.ctof = QtWidgets.QPushButton(self.centralwidget)
-        self.ctof.setGeometry(QtCore.QRect(230, 610, 101, 30))
+        self.ctof.setGeometry(QtCore.QRect(230, 640, 101, 30))
         self.ctof.setObjectName("ctof")
         self.ctof.clicked.connect(self.changetempunit)
         self.statusedit = QtWidgets.QPlainTextEdit(self.centralwidget)
-        self.statusedit.setGeometry(QtCore.QRect(740, 60, 271, 170))
+        self.statusedit.setGeometry(QtCore.QRect(740, 50, 271, 170))
         self.statusedit.setObjectName("statusedit")
         self.statuslabel = QtWidgets.QLabel(self.centralwidget)
         self.statuslabel.setGeometry(QtCore.QRect(820, 20, 111, 22))
