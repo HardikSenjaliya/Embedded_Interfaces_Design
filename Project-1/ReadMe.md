@@ -34,5 +34,5 @@ and matplotlib functions for fetching the values and displaying them on request 
 2. Extra credit of changing the temperature unit has also been added as a functionality, a button changes its title from *C-To-F* to *F-To-C* whenever pressed and the GUI on the frontend entirely switches the unit with upcoming values.
 3. The plots' titles, x-axis and y-axis have been labelled and shall be controlled by a button for getting last 10 values, and respond to the C-To-F or F-To-C buttons as well. 
 4. A *Refresh button* for the user to restart the GUI once all the 30 readings have been completed and database values have been displayed on the terminal and the status line.
-
+5. The Mysql database pushes 10 latest vaues to the plot when asked by the user, if the number of readings is less than 10, then the Alarm message box shall give an alert for the same to prompt the user to wait till 10 readings are done.
 
