@@ -1,0 +1,115 @@
+/*
+	https://css-tricks.com/left-and-right/
+*/
+
+body{
+	background-color: white;
+}
+
+h1{
+	color: #000000;
+	text-align: center;
+}
+
+/* Pen-specific styles */
+* {
+  box-sizing: border-box;
+}
+body {
+  font-size: 1.25rem;
+  font-family: sans-serif;
+  line-height: 150%;
+  text-shadow: 0 2px 2px #FFFFFF;
+}
+
+section {
+  color: #fff;
+  text-align: center;
+}
+
+div {
+  height: 100%;
+}
+
+article {
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 1.75rem;
+  margin: 0 0 0.75rem 0;
+}
+
+/* Pattern styles */
+.container {
+  display: table;
+  width: 100%;
+}
+
+.left-half {
+  background-color: yellow;
+  position: absolute;
+  left: 0px;
+  width: 50%;
+}
+
+.right-half {
+  background-color: aqua;
+  position: absolute;
+  right: 0px;
+  width: 50%;
+}
+
+.left-buttons{
+  background-color: red;
+  border: none;
+  color: black;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+.get-temperature{
+  background-color: red;
+  position: relative;
+  right: 250px;
+  top: 100px;
+}
+
+.left-buttons:active{
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.left-buttons:hover {background-color: #3e8e41}
+
+.c2f{
+  background-color: red;
+  position: relative;
+  left: 500px;
+  top: 100px;
+}
+
+#output-temp{
+  padding: 15px 15px;
+  line-height: 10px;
+  background-color: white;
+  color: red;
+  font-size: 15px;
+  position: relative;
+  right: 100px;
+  top: 100px;
+  border-radius: 25px;
+}
+
