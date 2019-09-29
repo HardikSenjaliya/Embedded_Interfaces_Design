@@ -2,13 +2,13 @@
 
 import tornado.httpserver
 import tornado.websocket
-import tornado.ioloop
+import tornado.ioloop  
 import tornado.web
 import socket
   
 class WSHandler(tornado.websocket.WebSocketHandler):
     def open(self):
-        print ('new connection')
+        print ('New connection established')
       
     def on_message(self, message):
         print ('message received:  %s' % message)
@@ -17,7 +17,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         self.write_message(message[::-1])
  
     def on_close(self):
-        print ('connection closed')
+        print ('Connection closed')
  
     def check_origin(self, origin):
         return True

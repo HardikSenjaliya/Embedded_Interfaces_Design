@@ -52,14 +52,14 @@ h1 {
 }
 
 .left-half {
-  background-color: yellow;
+  background-color: lightcoral;
   position: absolute;
   left: 0px;
   width: 50%;
 }
 
 .right-half {
-  background-color: aqua;
+  background-color: khaki;
   position: absolute;
   right: 0px;
   width: 50%;
@@ -82,8 +82,29 @@ h1 {
 .get-temperature{
   background-color: red;
   position: relative;
-  right: 250px;
-  top: 100px;
+  right: -200px;
+  top: 500px;
+}
+
+.get-temperature-nodejs{
+  background-color: red;
+  position: relative;
+  right: 150px;
+  top: 150px;
+}
+
+.get-humidity-tornado{
+  background-color: red;
+  position: relative;
+  right: -200px;
+  top: 500px;
+}
+
+.get-humidity-nodejs{
+  background-color: red;
+  position: relative;
+  right: 150px;
+  top: 150px;
 }
 
 .left-buttons:active{
@@ -97,8 +118,8 @@ h1 {
 .c2f{
   background-color: red;
   position: relative;
-  left: 500px;
-  top: 100px;
+  left: 320px;
+  top: 200px;
 }
 
 #output-temp{
@@ -108,8 +129,43 @@ h1 {
   color: red;
   font-size: 15px;
   position: relative;
-  right: 100px;
-  top: 100px;
+  right: 10px;
+  top: 700px;
   border-radius: 25px;
 }
 
+#output-temp-nodejs{
+  padding: 15px 15px;
+  line-height: 10px;
+  background-color: white;
+  color: red;
+  font-size: 15px;
+  position: relative;
+  right: 350px;
+  top: 300px;
+  border-radius: 25px;
+}
+
+#output-humidity-tornado{
+  padding: 15px 15px;
+  line-height: 10px;
+  background-color: white;
+  color: red;
+  font-size: 15px;
+  position: relative;
+  right: -10px;
+  top: 700px;
+  border-radius: 25px;
+}
+
+#output-humidity-nodejs{
+  padding: 15px 15px;
+  line-height: 10px;
+  background-color: white;
+  color: red;
+  font-size: 15px;
+  position: relative;
+  right: 300px;
+  top: 300px;
+  border-radius: 25px;
+}

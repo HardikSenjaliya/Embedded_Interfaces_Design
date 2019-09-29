@@ -1,4 +1,8 @@
 $(document).ready(function(){
+	
+
+
+//tornado webserver
 
 	var ws;
 	var host = "localhost";
