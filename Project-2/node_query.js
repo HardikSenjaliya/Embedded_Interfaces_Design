@@ -1,33 +1,34 @@
-$(document).ready(function(){
-
+$(document).ready(function(){	
+		
 //nodejs webserver
 
-
-	var ws;
+	 var ws;
 
  	 // create websocket instance
 
      ws = new WebSocket('ws://localhost:9898/ws');
-	
-	
-	// Handle incoming websocket message callback
- 	 ws.onmessage = function(evt) {
- 	 	var temp = evt.data;
- 	 	$("#output-temp-nodejs").val(temp);
+    
+
+ 	 ws.onmessage = function (evt) {
+	 var hum = evt.data;
+			
+     $("#output-sql").val(hum);
+
  	 };
 	 
- 	 // Close Websocket callback
- 	 ws.onclose = function(evt) {
- 	 };
+	//Close websocket callback
+ 	 ws.onclose = function (evt) {
+ 	 }; 	 
  	 
- 	 
- 	 ws.onopen = function(evt) {
-		console.log('Hi this is web client.');
+	//open websocket callback
+	 ws.onopen = function (evt) {
+		
 	};
- 
+	
+	$(".get-last-sql").click(function () {
+		ws.send("Get SQL").val();	
 
-	$(".get-temperature-nodejs").click(function() {
-		ws.send("500").val();
 	});
 
 });
+

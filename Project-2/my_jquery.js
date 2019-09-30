@@ -15,7 +15,7 @@ $(document).ready(function(){
  	 // Handle incoming websocket message callback
  	 ws.onmessage = function(evt) {
  	 	var temp = evt.data;
- 	 	$("#output-temp").val(temp);
+ 	 	$("#output-vals").val(temp);
  	 };
 
  	 // Close Websocket callback
@@ -26,7 +26,7 @@ $(document).ready(function(){
   	ws.onopen = function(evt) { 
   	};	
 
-	$(".get-temperature").click(function() {
+	$(".get-vals").click(function() {
 		//$("#output-temp").val("400");
 		ws.send("500").val();
 	});

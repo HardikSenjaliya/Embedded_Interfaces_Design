@@ -51,21 +51,15 @@ h1 {
   width: 100%;
 }
 
-.left-half {
-  background-color: lightcoral;
+.gui {
+  background-color: plum;
   position: absolute;
   left: 0px;
-  width: 50%;
+  width: 100%;
+
 }
 
-.right-half {
-  background-color: khaki;
-  position: absolute;
-  right: 0px;
-  width: 50%;
-}
-
-.left-buttons{
+.buttons{
   background-color: red;
   border: none;
   color: black;
@@ -79,93 +73,74 @@ h1 {
   cursor: pointer;
 }
 
-.get-temperature{
+.get-vals{
   background-color: red;
   position: relative;
-  right: -200px;
+  right: 760px;
+  top: 100px;
+}
+
+.get-last-sql{
+  background-color: red;
+  position: absolute;
+  right: 100px;
+  top: 100px;
+}
+
+.compare-datasets{
+  background-color: red;
+  position: absolute;
+  right: 150px;
+  top: 450px;
+}
+
+.change-unit{
+  background-color: red;
+  position: absolute;
+  right: 1600px;
   top: 500px;
 }
 
-.get-temperature-nodejs{
+.get-graphs{
   background-color: red;
-  position: relative;
-  right: 150px;
-  top: 150px;
+  position: absolute;
+  right: 890px;
+  top: 100px;
 }
 
-.get-humidity-tornado{
-  background-color: red;
-  position: relative;
-  right: -200px;
-  top: 500px;
-}
 
-.get-humidity-nodejs{
-  background-color: red;
-  position: relative;
-  right: 150px;
-  top: 150px;
-}
-
-.left-buttons:active{
+.buttons:active{
   background-color: #3e8e41;
   box-shadow: 0 5px #666;
   transform: translateY(4px);
 }
 
-.left-buttons:hover {background-color: #3e8e41}
+.buttons:hover {background-color: #3e8e41}
 
-.c2f{
-  background-color: red;
-  position: relative;
-  left: 320px;
+#output-vals{
+  padding: 1px 1px;
+  line-height: 200px;
+  width: 300px;
+  background-color: white;
+  color: black;
+  font-size: 15px;
+  position: absolute;
+  right: 1550px;
   top: 200px;
-}
-
-#output-temp{
-  padding: 15px 15px;
-  line-height: 10px;
-  background-color: white;
-  color: red;
-  font-size: 15px;
-  position: relative;
-  right: 10px;
-  top: 700px;
   border-radius: 25px;
 }
 
-#output-temp-nodejs{
-  padding: 15px 15px;
-  line-height: 10px;
+#output-sql{
+  padding: 1px 1px;
+  line-height: 200px;
+  width: 300px;
   background-color: white;
-  color: red;
+  color: black;
   font-size: 15px;
-  position: relative;
-  right: 350px;
-  top: 300px;
+  position: absolute;
+  right: 90px;
+  top: 200px;
   border-radius: 25px;
 }
 
-#output-humidity-tornado{
-  padding: 15px 15px;
-  line-height: 10px;
-  background-color: white;
-  color: red;
-  font-size: 15px;
-  position: relative;
-  right: -10px;
-  top: 700px;
-  border-radius: 25px;
-}
 
-#output-humidity-nodejs{
-  padding: 15px 15px;
-  line-height: 10px;
-  background-color: white;
-  color: red;
-  font-size: 15px;
-  position: relative;
-  right: 300px;
-  top: 300px;
-  border-radius: 25px;
-}

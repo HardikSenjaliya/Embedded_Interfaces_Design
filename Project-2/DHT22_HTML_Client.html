@@ -11,36 +11,27 @@
 </head>
 <body>
 
-<h1>DHT22 Sensor</h1>
-
 <section class="container">
-	<div class="left-half">
+	<div class="gui">
     	<article>
-      		<h1>Temperature</h1>
+      		<h1>DHT22 - Client</h1>
     	</article>  
-    	
-    	<!--button class="left-buttons c2f">C2F</button-->
 
 
-    	<button class="left-buttons get-temperature" >Get Temperature from Tornado</button>
- 		<input type="text" maxlength="4" size="4" id="output-temp">   
+    	<button class="buttons get-vals" >Get Values from Tornado</button>
+ 		<input type="text" maxlength="4" size="4" id="output-vals">   
 		
-	<button class="left-buttons get-temperature-nodejs" >Get Temperature from Node.js</button>
- 		<input type="text" maxlength="4" size="4" id="output-temp-nodejs"> 
-
-  	</div>
+	<button class="buttons get-last-sql" >Get MySQL value from Node.js</button>
+ 		<input type="text" maxlength="4" size="4" id="output-sql"> 
   
-
-  	<div class="right-half">
-    	<article>
-    		<h1>Humidity</h1>
-   		</article>
 		
-	<button class="left-buttons get-humidity-tornado" >Get Humidity from Tornado</button>
- 		<input type="text" maxlength="4" size="4" id="output-humidity-tornado"> 
+	<button class="buttons compare-datasets" >Compare Datasets</button>
+ 		
 		
-	<button class="left-buttons get-humidity-nodejs" >Get Humidity fro Node.js</button>
- 		<input type="text" maxlength="4" size="4" id="output-humidity-nodejs"> 
+	<button class="buttons change-unit" >Change Temperature Unit</button>
+	
+	
+ 	<button class="buttons get-graphs" >Get Plots</button>	
 		
   	</div>
 	
