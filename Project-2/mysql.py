@@ -63,7 +63,7 @@ class database:
                 print (row[0], " ", row[1], " ", row[4])
                 globals.humi_list.append(row[4])
                 globals.time_stamp.append(row[1])
-
+                
     #print all values after 30 readings
     def printall(self,index):
         index=0
