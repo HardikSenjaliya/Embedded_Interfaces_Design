@@ -1,11 +1,9 @@
 $(document).ready(function(){
 	
-
-
 //tornado webserver
 
 	var ws;
-	var host = "localhost";
+	var host = "10.0.0.193";
 	var port = "8888";
 	var uri = "/ws";
 
@@ -14,8 +12,12 @@ $(document).ready(function(){
 
  	 // Handle incoming websocket message callback
  	 ws.onmessage = function(evt) {
- 	 	var temp = evt.data;
- 	 	$("#output-vals").val(temp);
+ 	 	var rcvd_message = evt.data.split(',');
+
+ 	 	$("#output-vals-time").val(rcvd_message[1]);
+ 	 	$("#output-vals-temp").val(rcvd_message[2] + "C");
+ 	 	$("#output-vals-humi").val(rcvd_message[3] + "%");
+
  	 };
 
  	 // Close Websocket callback
@@ -26,11 +28,7 @@ $(document).ready(function(){
   	ws.onopen = function(evt) { 
   	};	
 
-	$(".get-vals").click(function() {
-		//$("#output-temp").val("400");
-		ws.send("500").val();
+	$(".get-vals-tornado").click(function() {
+		ws.send("Get Current Sensor Values").val();
 	});
-
-
-
 });
