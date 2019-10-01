@@ -73,17 +73,17 @@ h1 {
   cursor: pointer;
 }
 
-.get-vals{
+.get-vals-tornado{
   background-color: red;
-  position: relative;
-  right: 760px;
+  position: absolute;
+  left: 200px;
   top: 100px;
 }
 
 .get-last-sql{
   background-color: red;
   position: absolute;
-  right: 100px;
+  right: 200px;
   top: 100px;
 }
 
@@ -97,8 +97,8 @@ h1 {
 .change-unit{
   background-color: red;
   position: absolute;
-  right: 1600px;
-  top: 500px;
+  left: 200px;
+  top: 400px;
 }
 
 .get-graphs{
@@ -117,7 +117,19 @@ h1 {
 
 .buttons:hover {background-color: #3e8e41}
 
-#output-vals{
+.text_box{
+  width: 10%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border-radius: 25px
+}
+
+.labels{
+  color: black;
+}
+
+/*#output-vals{
   padding: 1px 1px;
   line-height: 200px;
   width: 300px;
@@ -128,7 +140,7 @@ h1 {
   right: 1550px;
   top: 200px;
   border-radius: 25px;
-}
+}*/
 
 #output-sql{
   padding: 1px 1px;
@@ -143,4 +155,38 @@ h1 {
   border-radius: 25px;
 }
 
+#output-vals-time{
+  position: absolute;
+  left: 200px;
+  top: 175px;
+}
 
+#output-vals-temp{
+  position: absolute;
+  left: 200px;
+  top: 250px;
+}
+
+#output-vals-humi{
+  position: absolute;
+  left: 200px;
+  top: 325px;
+}
+
+#label_output-vals-time{
+  position: absolute;
+  left: 50px;
+  top: 190px;
+}
+
+#label_output-vals-temp{
+  position: absolute;
+  left: 50px;
+  top: 265px;
+}
+
+#label_output-vals-humi{
+  position: absolute;
+  left: 50px;
+  top: 340px;
+}
