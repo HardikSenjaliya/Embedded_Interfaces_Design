@@ -14,9 +14,11 @@ $(document).ready(function(){
  	 ws.onmessage = function(evt) {
  	 	var rcvd_message = evt.data.split(',');
 
- 	 	$("#output-vals-time").val(rcvd_message[1]);
- 	 	$("#output-vals-temp").val(rcvd_message[2] + "C");
- 	 	$("#output-vals-humi").val(rcvd_message[3] + "%");
+ 	 	if(rcvd_message[0] == "Get Current Sensor Values"){
+ 	 		$("#output-vals-time").val(rcvd_message[1]);
+ 	 		$("#output-vals-temp").val(rcvd_message[2] + "C");
+ 	 		$("#output-vals-humi").val(rcvd_message[3] + "%");
+ 	 	}
 
  	 };
 

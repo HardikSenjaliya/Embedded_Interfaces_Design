@@ -61,7 +61,7 @@ h1 {
 
 .buttons{
   background-color: red;
-  border: none;
+  border: 3px solid #00FFFF;
   color: black;
   padding: 15px 32px;
   text-align: center;
@@ -71,6 +71,7 @@ h1 {
   margin: 4px 2px;
   border-radius: 25px;
   cursor: pointer;
+  font-weight: bold
 }
 
 .get-vals-tornado{
@@ -90,7 +91,7 @@ h1 {
 .compare-datasets{
   background-color: red;
   position: absolute;
-  right: 150px;
+  right: 200px;
   top: 450px;
 }
 
@@ -104,7 +105,7 @@ h1 {
 .get-graphs{
   background-color: red;
   position: absolute;
-  right: 890px;
+  right: 850px;
   top: 100px;
 }
 
@@ -122,11 +123,17 @@ h1 {
   padding: 12px 20px;
   margin: 8px 0;
   box-sizing: border-box;
-  border-radius: 25px
+  border-radius: 25px;
+  text-align: center;
+  font-size: large;
+  background-color: #F0FFFF;
+  font-weight: bold;
+  border: 3px solid #555
 }
 
 .labels{
   color: black;
+  font-weight: bold;
 }
 
 /*#output-vals{
