@@ -10,11 +10,16 @@ import MySQLdb
    
 #mydb = database()
 
+
+
 class WSHandler(tornado.websocket.WebSocketHandler):
+    
     def open(self):
         print ('New connection established')
       
     def on_message(self, message):
+        
+        data = message
         
         eidDB = MySQLdb.connect(host="localhost",
                      user="hardyk",
@@ -23,13 +28,20 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         )
 
         mycur = eidDB.cursor()
+        if (message == "Get Current Sensor Values"):
+            mycur.execute("SELECT * FROM sensor_values ORDER BY formatted_time DESC LIMIT 1")
+            key, f_time, temp_c, temp_f, humi = mycur.fetchone()
+            #print(key,f_time, temp_c, temp_f, humi)
+            data = f_time + "," + str(temp_c) + "," + str(humi)
+            self.write_message(message +","+str(data))
+        
+        elif (message == "Get Last Ten Values"):
+            mycur.execute("SELECT * FROM sensor_values ORDER BY formatted_time DESC LIMIT 10")
+            for row in mycur.fetchall():
+                data = data + "," + str(row[4])
                 
-        mycur.execute("SELECT * FROM sensor_values ORDER BY formatted_time DESC LIMIT 1")
-        key,f_time, temp_c, temp_f, humi = mycur.fetchone()
-        #print(key,f_time, temp_c, temp_f, humi)
-        temp = f_time + "," + str(temp_c) + "," + str(humi)
-    
-        self.write_message(message +","+str(temp))
+            self.write_message(data)          
+            
  
     def on_close(self):
         print ('Connection closed')
