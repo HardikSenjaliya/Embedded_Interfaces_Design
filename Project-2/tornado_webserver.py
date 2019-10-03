@@ -51,6 +51,8 @@ class WSHandler(tornado.websocket.WebSocketHandler):
  
 application = tornado.web.Application([
     (r'/ws', WSHandler),
+    (r"/(humidityplot.png)",tornado.web.StaticFileHandler,{'path':'./'}),
+    (r"/(tempplot.png)",tornado.web.StaticFileHandler,{'path':'./'}),
 ])
  
  

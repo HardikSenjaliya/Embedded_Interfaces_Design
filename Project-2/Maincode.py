@@ -129,6 +129,7 @@ class Ui_MainWindow(object):
         self.humiditygraph.canvas.ax.set_ylabel('Humidity')
         self.humiditygraph.canvas.ax.plot(x,y)
         self.humiditygraph.canvas.draw()
+        self.humiditygraph.canvas.print_figure('humidityplot')
         globals.humi_list.clear()
         globals.time_stamp.clear()
 
@@ -156,6 +157,7 @@ class Ui_MainWindow(object):
 
         self.temperaturegraph.canvas.ax.plot(x,y)
         self.temperaturegraph.canvas.draw()
+        self.temperaturegraph.canvas.print_figure('tempplot')
         globals.tempc_list.clear()
         globals.tempf_list.clear()
         globals.time_stamp.clear()
