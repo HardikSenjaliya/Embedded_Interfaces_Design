@@ -6,18 +6,22 @@ import tornado.ioloop
 import tornado.web
 import socket
 import MySQLdb
-#from mysql import database
-   
-#mydb = database()
+from Maincode import Ui_MainWindow
+import Adafruit_DHT
+from datetime import datetime
+import globals
 
-
+vals = Ui_MainWindow()
+globals.gunit=0;
+        
 
 class WSHandler(tornado.websocket.WebSocketHandler):
     
     def open(self):
-        print ('New connection established')
+        print ('New connection established (Tornado <--> Client)')
       
     def on_message(self, message):
+        
         
         data = message
         
@@ -29,22 +33,26 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 
         mycur = eidDB.cursor()
         if (message == "Get Current Sensor Values"):
-            mycur.execute("SELECT * FROM sensor_values ORDER BY formatted_time DESC LIMIT 1")
-            key, f_time, temp_c, temp_f, humi = mycur.fetchone()
-            #print(key,f_time, temp_c, temp_f, humi)
-            data = f_time + "," + str(temp_c) + "," + str(humi)
-            self.write_message(message +","+str(data))
+            vals.sensor()
+       
+            datetimeobj=datetime.now()
+            allvalues = str(datetimeobj.hour)+":"+str(datetimeobj.minute)+":"+str(datetimeobj.second) + "," + str(globals.gtempc) + " C" + "," + str(globals.ghum)
+            self.write_message(message +","+str(allvalues))
         
         elif (message == "Get Last Ten Values"):
+            print ("Getting Last 10 values from Tornado")
+            
             mycur.execute("SELECT * FROM sensor_values ORDER BY formatted_time DESC LIMIT 10")
             for row in mycur.fetchall():
                 data = data + "," + str(row[4])
-                
-            self.write_message(data)          
+          
+            self.write_message(data)
+            
+            
             
  
     def on_close(self):
-        print ('Connection closed')
+        print ('Connection closed (Tornado <--> Client)')
  
     def check_origin(self, origin):
         return True
@@ -60,5 +68,5 @@ if __name__ == "__main__":
     http_server = tornado.httpserver.HTTPServer(application)
     http_server.listen(8888)
     myIP = socket.gethostbyname(socket.gethostname())
-    print ('*** Websocket Server Started at %s***' % myIP)
+    print ('*** Tornado Websocket Server Started at %s***' % myIP)
     tornado.ioloop.IOLoop.current().start()

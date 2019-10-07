@@ -21,9 +21,18 @@ from datetime import datetime
 import threading
 from mplwidget import MplWidget
 from mysql import database
+import tornado.httpserver
+import tornado.websocket
+import tornado.ioloop  
+import tornado.web
+import asyncio
+import socket
+import MySQLdb
+import Adafruit_DHT
 import globals
 import sys
 import os
+import MySQLdb
 
 #global variables
 
@@ -36,6 +45,73 @@ tempc = 0.0
 tempf = 0.0
 
 mydb = database()
+
+class TornadoServer(tornado.web.Application):
+    def __init__(self):
+        handlers = [(r"/ws", WSHandler), (r"/(humidityplot.png)",tornado.web.StaticFileHandler,{'path':'./'}), (r"/(tempplot.png)",tornado.web.StaticFileHandler,{'path':'./'}),]
+        settings = {'debug': True}
+        super().__init__(handlers, **settings)
+
+    def run(self, port=8888):
+        
+        self.listen(8888)
+        myIP = socket.gethostbyname(socket.gethostname())
+        print ('*** Websocket Server Started at %s***' % myIP)
+        tornado.ioloop.IOLoop.current().start()
+            
+#UI = Ui_MainWindow()
+
+class WSHandler(tornado.websocket.WebSocketHandler):
+    
+    def open(self):
+        print ('New connection established')
+      
+    def on_message(self, message):    
+        
+        data = message
+
+        if (message == "Get Current Sensor Values"):
+            ui.sensor()
+            if(globals.gtempc == 0 and globals.ghum == 0):
+                self.write_message(message + "," + "Sensor Disconnected")
+            else:
+                datetimeobj=datetime.now()
+                allvalues = str(datetimeobj.hour)+":"+str(datetimeobj.minute)+":"+str(datetimeobj.second) + "," + str(globals.gtempc) + " C" + "," + str(globals.ghum)
+                self.write_message(message +","+str(allvalues))
+        
+        elif (message == "Get Last Ten Values"):
+            if(count < 10):
+                data = data + "," + "Wait for 10 Readings"
+                self.write_message(data)
+            else:
+                mydb.get_last_ten_humi_values(count)
+                for humi in globals.humi_list:
+                    data = data + "," + str(humi)
+                self.write_message(data)
+                globals.humi_list.clear()
+            
+        elif (message == "Get Temp Graph"):
+            if(count < 10):
+                data = "Wait for 10 Readings"
+                self.write_message(data)
+            else:
+                ui.plottempgraph()
+                self.write_message("Graph Available")
+            
+        elif (message == "Get Humi Graph"):
+            if(count < 10):
+                data = "Wait for 10 Readings"
+                self.write_message(data)
+            else:
+                ui.plothumgraph()
+ 
+    def on_close(self):
+        print ('Connection closed')
+ 
+    def check_origin(self, origin):
+        return True
+ 
+
 
 #main class
 class Ui_MainWindow(object):
@@ -58,7 +134,15 @@ class Ui_MainWindow(object):
             tempf=(tempc * 9)/5 + 32
             if tempunit == "F":
                 temperature = (temperature * 9)/5 + 32
+                
+            globals.gtempc = tempc
+            globals.gtempf = tempf
+            globals.ghum = round(humidity,2)
+            
         else:
+            globals.gtempc = 0.0
+            globals.gtempf = 0.0 
+            globals.ghum = 0
             temperature=0.00
             humidity=0.0
             tempc=0.0
@@ -76,6 +160,8 @@ class Ui_MainWindow(object):
         self.tempval.text()
         self.humval.setText("    "+str(round(humidity,1))+" "+"%")
         self.humval.text()
+
+
 
     #Change the unit from Celcius to Fahrenheit or vice-versa
     def changetempunit(self):
@@ -111,6 +197,7 @@ class Ui_MainWindow(object):
             self.tempval.setText("    "+str(round(tempc,2))+" "+tempunit)
             self.tempval.text()
             self.statusedit.setPlainText("    Reading: "+str(count)+"\n\n"+"    Time: "+str(datetimeobj1.hour)+":"+str(datetimeobj1.minute)+":"+str(datetimeobj1.second)+"\n\n"+"    Temperature: "+str(round(tempc,2))+" "+tempunit + "\n\n" +"    Humidity: "+str(round(humidity,1))+" "+"%")
+
 
     #Plot the graph for last ten values of humidity
     def plothumgraph(self):
@@ -202,8 +289,9 @@ class Ui_MainWindow(object):
             self.refb.setEnabled(True)
             #exit
         else:
-            count = count + 1
+            count = count + 1        
             self.printvals()
+        globals.gc = count; 
 
     #refresh the timer to re-start the timer
     def refreshtimer(self):
@@ -344,13 +432,45 @@ class Ui_MainWindow(object):
         self.statuslabel.setText(_translate("MainWindow", "Sensor Status :"))
 
 
-if __name__ == "__main__":
+# application = tornado.web.Application([
+#     (r'/ws', WSHandler),
+#     (r"/(humidityplot.png)",tornado.web.StaticFileHandler,{'path':'./'}),
+#     (r"/(tempplot.png)",tornado.web.StaticFileHandler,{'path':'./'}),
+# ])
+
+ui = Ui_MainWindow()
+
+def run_UI():
     import sys
     globals.global_init()
     mydb.delete_values_db()
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+
+server = TornadoServer()
+
+def run_tornado():
+    asyncio.set_event_loop(asyncio.new_event_loop())
+    server.run()
+    # http_server = tornado.httpserver.HTTPServer(application)
+    # http_server.listen(8888)
+    # myIP = socket.gethostbyname(socket.gethostname())
+    # print ('*** Websocket Server Started at %s***' % myIP)
+    # tornado.ioloop.IOLoop.current().start()
+
+
+if __name__ == "__main__":
+
+    thread_1 = threading.Thread(target = run_UI)
+    thread_2 = threading.Thread(target = run_tornado)
+
+    thread_1.start()
+    thread_2.start()
+
+    thread_1.join()
+    thread_2.join()
+
+    print("Program Done")
