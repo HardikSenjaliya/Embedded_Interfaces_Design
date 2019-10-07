@@ -13,7 +13,7 @@
    Also connect a 10k resistor between pins 1 and 2 of the sensor.
 3. Install python3 and other libraries for mysql to function, npm install for nodejs code and pip install tornado for the tornado server to work.
 4. The project contains one driver file *P2init.sh* which is a shell script to start-up : Maincode.py (python app), nodeserver.js (node.js server) and tornado_webserver.js (tornado server).
-5. After the init shell script, get to the web browser to open the HTML client, which shall then ensure the servers getting connecting to the client, after which the user can use the buttons to get values as needed.
+5. After the init shell script, get to the web browser to open the HTML client (which is designed using a .css styling sheet, .html file and a jquery JavaScript file to handle all labels/inputs/buttons on the window), which shall then ensure the servers getting connecting to the client, after which the user can use the buttons to get values as needed.
 6. The Tornado server shall give the real-time sensor values and Node.JS gives the last recorded value from the sql database; after 10 values of recording from the App, the datasets can be compared to check the duration time of the nodejs and tornado routes for getting humidity values, also, locally the temperature unit can be altered and all values can be cleared if needed.   
 7. On terminating the script with Ctrl+C, the code shall clean up with all values cleared and all processes terminated.
 
