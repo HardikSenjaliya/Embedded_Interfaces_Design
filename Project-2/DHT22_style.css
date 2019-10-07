@@ -52,7 +52,7 @@ h1 {
 }
 
 .gui {
-  background-color: plum;
+  background-color: lightblue;
   position: absolute;
   left: 0px;
   width: 100%;
@@ -60,7 +60,7 @@ h1 {
 }
 
 .buttons{
-  background-color: red;
+  background-color: teal;
   border: 3px solid #00FFFF;
   color: black;
   padding: 15px 32px;
@@ -75,40 +75,53 @@ h1 {
 }
 
 .get-vals-tornado{
-  background-color: red;
+  background-color: teal;
   position: absolute;
   left: 200px;
   top: 100px;
 }
 
 .get-last-sql{
-  background-color: red;
+  background-color: teal;
   position: absolute;
   right: 200px;
   top: 100px;
 }
 
 .compare-datasets{
-  background-color: red;
+  background-color: teal;
   position: absolute;
-  right: 200px;
-  top: 450px;
+  right: 800px;
+  bottom: 100px;
+}
+
+.compare-nj{
+  background-color: teal;
+  position: absolute;
+  right: 801px;
+  bottom: 100px;
 }
 
 .change-unit{
-  background-color: red;
+  background-color: teal;
   position: absolute;
   left: 200px;
   top: 400px;
 }
 
-.get-graphs{
-  background-color: red;
+.get-temp-graph{
+  background-color: teal;
   position: absolute;
-  right: 850px;
+  left: 700px;
   top: 100px;
 }
 
+.get-humi-graph{
+  background-color: teal;
+  position: absolute;
+  right: 700px;
+  top: 100px;
+}
 
 .buttons:active{
   background-color: #3e8e41;
@@ -116,7 +129,7 @@ h1 {
   transform: translateY(4px);
 }
 
-.buttons:hover {background-color: #3e8e41}
+.buttons:hover {background-color: white}
 
 .text_box{
   width: 10%;
@@ -128,7 +141,9 @@ h1 {
   font-size: large;
   background-color: #F0FFFF;
   font-weight: bold;
-  border: 3px solid #555
+  border: 3px solid #555;
+  color: green;
+
 }
 
 .labels{
@@ -136,32 +151,19 @@ h1 {
   font-weight: bold;
 }
 
-/*#output-vals{
-  padding: 1px 1px;
-  line-height: 200px;
-  width: 300px;
-  background-color: white;
-  color: black;
-  font-size: 15px;
+.clear-data{
   position: absolute;
-  right: 1550px;
-  top: 200px;
-  border-radius: 25px;
-}*/
-
-#output-sql{
-  padding: 1px 1px;
-  line-height: 200px;
-  width: 300px;
-  background-color: white;
-  color: black;
-  font-size: 15px;
-  position: absolute;
-  right: 90px;
-  top: 200px;
-  border-radius: 25px;
+  bottom: 25px;
+  right: 850px;
 }
 
+#output-nodejs-sql{
+  position: absolute;
+  right: 90px;
+  top: 200px;  
+}
+
+/*tornado real time values*/
 #output-vals-time{
   position: absolute;
   left: 200px;
@@ -197,3 +199,171 @@ h1 {
   left: 50px;
   top: 340px;
 }
+
+/*nodejs values from sql*/
+#output-vals-time-nj{
+  position: absolute;
+  right: 200px;
+  top: 175px;
+}
+
+#output-vals-temp-nj{
+  position: absolute;
+  right: 200px;
+  top: 250px;
+}
+
+#output-vals-humi-nj{
+  position: absolute;
+  right: 200px;
+  top: 325px;
+}
+
+#label_output-vals-time-nj{
+  position: absolute;
+  right: 50px;
+  top: 190px;
+}
+
+#label_output-vals-temp-nj{
+  position: absolute;
+  right: 50px;
+  top: 265px;
+}
+
+#label_output-vals-humi-nj{
+  position: absolute;
+  right: 50px;
+  top: 340px;
+}
+
+/*tornado table*/
+
+#label_tornado_data_table{
+  position: absolute;
+  left: 100px;
+  top: 500px;
+}
+
+#tornado_data_table{
+  position: absolute;
+  top:575px;
+  left: 400px;
+  border-collapse: collapse;
+  width: 10%;
+  border: 3px solid white;
+  font-size: 18px;
+  color: green;
+  font-weight: bold;
+}
+
+#tornado_data_table tr{
+  border-bottom: 2px solid white;
+}
+
+#tornado-start-time{
+  position: absolute;
+  left: 200px;
+  top: 560px;
+}
+
+#tornado-end-time{
+  position: absolute;
+  left: 200px;
+  top: 800px;
+}
+
+#tornado-diff-time{
+  position: absolute;
+  left: 200px;
+  top: 860px;
+}
+
+#label_tornado-start-time{
+  position: absolute;
+  left: 50px;
+  top: 575px;
+}
+
+#label_tornado-end-time{
+  position: absolute;
+  left: 50px;
+  top: 815px;
+}
+
+#label_tornado-diff-time{
+  position: absolute;
+  left: 50px;
+  top: 875px;
+}
+
+/*node js table*/
+
+#label_nodejs_data_table{
+  position: absolute;
+  right: 100px;
+  top: 500px;
+}
+
+#nodejs_data_table{
+  position: absolute;
+  top:575px;
+  right: 400px;
+  border-collapse: collapse;
+  width: 10%;
+  border: 3px solid white;
+  font-size: 18px;
+  color: green;
+  font-weight: bold;
+}
+
+#nodejs_data_table tr{
+  border-bottom: 2px solid white;
+}
+
+#nj-start-time{
+  position: absolute;
+  right: 200px;
+  top: 560px;
+}
+
+#nj-end-time{
+  position: absolute;
+  right: 200px;
+  top: 800px;
+}
+
+#nj-diff-time{
+  position: absolute;
+  right: 200px;
+  top: 860px;
+}
+
+#label_nj-start-time{
+  position: absolute;
+  right: 50px;
+  top: 575px;
+}
+
+#label_nj-end-time{
+  position: absolute;
+  right: 50px;
+  top: 815px;
+}
+
+#label_nj-diff-time{
+  position: absolute;
+  right: 50px;
+  top: 875px;
+}
+
+.graphs{
+  top: 150px;
+}
+
+#temp-graph{
+  position: absolute;
+  left: 720px;
+  top: 170px;
+}
+

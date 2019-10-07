@@ -6,7 +6,7 @@
 	<link rel="stylesheet" href="DHT22_style.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="my_jquery.js"></script>
-	<script src="node_query.js"></script>
+
 
 </head>
 <body>
@@ -17,29 +17,64 @@
       		<h1>DHT22 - Client</h1>
     	</article>  
 
-
-    	<button class="buttons get-vals-tornado" >Get Values from Tornado</button>
+		<!-- Button and Text Box for Getting Latest Values from Tornado -->
+		<button class="buttons get-vals-tornado" >Get Values from Tornado</button>
  		<label class="labels" id="label_output-vals-temp" for="output-vals-temp">Temperature</label>
- 		<input class="text_box" type="text" maxlength="4" size="4" id="output-vals-temp">   
+ 		<input class="text_box" type="text" maxlength="4" size="4" id="output-vals-temp"  disabled>   
  		<label class="labels" id="label_output-vals-humi" for="output-vals-humi">Humidity</label>
- 		<input class="text_box" type="text" maxlength="4" size="4" id="output-vals-humi">   
+ 		<input class="text_box" type="text" maxlength="4" size="4" id="output-vals-humi" disabled>   
  		<label class="labels" id="label_output-vals-time" for="output-vals-time">TimeStamp</label>
- 		<input class="text_box" type="text" maxlength="4" size="4" id="output-vals-time">
+ 		<input class="text_box" type="text" maxlength="4" size="4" id="output-vals-time" disabled>
 
+ 		<!-- Button for NodeJs and MySQL interacton -->
 		<button class="buttons get-last-sql" >Get MySQL value from Node.js</button>
- 		<input class="text_box" type="text" maxlength="4" size="4" id="output-sql"> 
-  
+		<label class="labels" id="label_output-vals-temp-nj" for="output-vals-temp-nj">Temperature</label>
+ 		<input class="text_box" type="text" maxlength="4" size="4" id="output-vals-temp-nj" disabled> 
+ 		<label class="labels" id="label_output-vals-humi-nj" for="output-vals-humi-nj">Humidity</label>
+ 		<input class="text_box" type="text" maxlength="4" size="4" id="output-vals-humi-nj" disabled> 
+ 		<label class="labels" id="label_output-vals-time-nj" for="output-vals-time-nj">TimeStamp</label>
+ 		<input class="text_box" type="text" maxlength="4" size="4" id="output-vals-time-nj" disabled> 
+  		
+  		<!-- Button for Changing Temp Unit -->
+  		<button class="buttons change-unit" >Change Temperature Unit</button>
+  			
+ 		<!-- Text box and lables for Time calculation - tornado -->
+ 		<label class="labels" id="label_tornado-start-time" for="tornado-start-time">Start Time</label>
+		<input class="text_box" type="text" maxlength="4" size="4" id="tornado-start-time" disabled> 
+		<label class="labels" id="label_tornado-end-time" for="tornado-end-time">End Time</label>
+		<input class="text_box" type="text" maxlength="4" size="4" id="tornado-end-time" disabled> 
+		<label class="labels" id="label_tornado-diff-time" for="tornado-diff-time">Time Diff</label>
+		<input class="text_box" type="text" maxlength="4" size="4" id="tornado-diff-time" disabled> 
 		
+		
+		<!-- Text box and lables for Time calculation - nodejs -->
+ 		<label class="labels" id="label_nj-start-time" for="nj-start-time">Start Time</label>
+		<input class="text_box" type="text" maxlength="4" size="4" id="nj-start-time" disabled> 
+		<label class="labels" id="label_nj-end-time" for="nj-end-time">End Time</label>
+		<input class="text_box" type="text" maxlength="4" size="4" id="nj-end-time" disabled> 
+		<label class="labels" id="label_nj-diff-time" for="nj-diff-time">Time Diff</label>
+		<input class="text_box" type="text" maxlength="4" size="4" id="nj-diff-time" disabled> 
+		
+		<!-- Button to Plot Graphs -->
+		<button class="buttons get-humi-graph" >Plot Humi</button>
+ 		<button class="buttons get-temp-graph" >Plot Temp</button>
+ 		<div class="graphs" id="temp-graph">
+ 			<img src="" >
+ 		</div>	
+
+ 		<!-- Button and Tables for Comparing Datasets -->
 		<button class="buttons compare-datasets" >Compare Datasets</button>
- 		
-		
-		<button class="buttons change-unit" >Change Temperature Unit</button>
-	
-	
- 		<button class="buttons get-graphs" >Get Plots</button>	
-			
+		<h2 class="labels" id="label_tornado_data_table">Humidity data from Tornado</h2>
+		<table id="tornado_data_table">
+		</table>
+
+		<h2 class="labels" id="label_nodejs_data_table">Humidity data from Node.JS</h2>
+		<table id="nodejs_data_table">
+		</table>
+
+ 		<button class="buttons clear-data" >Clear</button>
+
   	</div>
-	
 
 
 </section>

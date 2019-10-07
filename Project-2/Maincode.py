@@ -24,6 +24,7 @@ from mysql import database
 import globals
 import sys
 import os
+import MySQLdb
 
 #global variables
 
@@ -58,7 +59,15 @@ class Ui_MainWindow(object):
             tempf=(tempc * 9)/5 + 32
             if tempunit == "F":
                 temperature = (temperature * 9)/5 + 32
+                
+            globals.gtempc = tempc
+            globals.gtempf = tempf
+            globals.ghum = round(humidity,2)
+            
         else:
+            globals.gtempc = 0.0
+            globals.gtempf = 0.0 
+            globals.ghum = 0
             temperature=0.00
             humidity=0.0
             tempc=0.0
@@ -76,6 +85,8 @@ class Ui_MainWindow(object):
         self.tempval.text()
         self.humval.setText("    "+str(round(humidity,1))+" "+"%")
         self.humval.text()
+
+
 
     #Change the unit from Celcius to Fahrenheit or vice-versa
     def changetempunit(self):
@@ -112,6 +123,7 @@ class Ui_MainWindow(object):
             self.tempval.text()
             self.statusedit.setPlainText("    Reading: "+str(count)+"\n\n"+"    Time: "+str(datetimeobj1.hour)+":"+str(datetimeobj1.minute)+":"+str(datetimeobj1.second)+"\n\n"+"    Temperature: "+str(round(tempc,2))+" "+tempunit + "\n\n" +"    Humidity: "+str(round(humidity,1))+" "+"%")
 
+
     #Plot the graph for last ten values of humidity
     def plothumgraph(self):
         if count < 10:
@@ -129,6 +141,7 @@ class Ui_MainWindow(object):
         self.humiditygraph.canvas.ax.set_ylabel('Humidity')
         self.humiditygraph.canvas.ax.plot(x,y)
         self.humiditygraph.canvas.draw()
+        self.humiditygraph.canvas.print_figure('humidityplot')
         globals.humi_list.clear()
         globals.time_stamp.clear()
 
@@ -156,6 +169,7 @@ class Ui_MainWindow(object):
 
         self.temperaturegraph.canvas.ax.plot(x,y)
         self.temperaturegraph.canvas.draw()
+        self.temperaturegraph.canvas.print_figure('tempplot')
         globals.tempc_list.clear()
         globals.tempf_list.clear()
         globals.time_stamp.clear()

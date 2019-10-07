@@ -34,6 +34,7 @@ class database:
         mycur.execute("SELECT * FROM sensor_values LIMIT 10 OFFSET 20")
         for row in mycur.fetchall():
                 print (row[0], " ", row[1], " ", row[2], " ", row[3], " ", row[4])
+                
 
     #fetch 10 temp values for the plot
     def get_last_ten_temp_values(self, index):
