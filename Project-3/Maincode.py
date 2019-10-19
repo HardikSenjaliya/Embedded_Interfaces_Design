@@ -17,7 +17,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QTimer, QTime
 from PyQt5.QtCore import pyqtSlot
 import Adafruit_DHT
-from datetime import datetime
+from datetime import date, datetime
+from time import sleep
 import threading
 from mplwidget import MplWidget
 from mysql import database
@@ -33,6 +34,7 @@ import globals
 import sys
 import os
 import MySQLdb
+from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 
 #global variables
 
@@ -45,6 +47,20 @@ tempc = 0.0
 tempf = 0.0
 
 mydb = database()
+
+
+# AWS IoT certificate based connection
+myMQTTClient = AWSIoTMQTTClient("123afhlss456")
+myMQTTClient.configureEndpoint("a2ytl2z266nk44-ats.iot.us-east-1.amazonaws.com", 8883)
+myMQTTClient.configureCredentials("/home/pi/Embedded_Interfaces_Design/Project-3/certs/AmazonRootCA1.pem", "/home/pi/Embedded_Interfaces_Design/Project-3/certs/private.pem.key", "/home/pi/Embedded_Interfaces_Design/Project-3/certs/certificate.pem.crt")
+myMQTTClient.configureOfflinePublishQueueing(-1)  # Infinite offline Publish queueing
+myMQTTClient.configureDrainingFrequency(2)  # Draining: 2 Hz
+myMQTTClient.configureConnectDisconnectTimeout(10)  # 10 sec
+myMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
+
+#connect and publish
+myMQTTClient.connect()
+myMQTTClient.publish("thing01/info", "connected", 0)
 
 class TornadoServer(tornado.web.Application):
     def __init__(self):
@@ -154,29 +170,25 @@ class Ui_MainWindow(object):
         global humidity,temperature,tempc,tempf
         self.sensor()
         datetimeobj=datetime.now()
+        now = datetime.utcnow()
+        now_str = now.strftime('%Y-%m-%dT%H:%M:%SZ')
         self.time.setText("    "+str(datetimeobj.hour)+":"+str(datetimeobj.minute)+":"+str(datetimeobj.second))
         self.time.text()
         self.tempval.setText("    "+str(round(temperature,2))+" "+tempunit)
         self.tempval.text()
         self.humval.setText("    "+str(round(humidity,1))+" "+"%")
         self.humval.text()
+        
+        payload = '{"timestamp": "' + now_str + ',"temperature": ' + str(round(temperature,2)) + ',"humidity": '+ str(round(humidity,1)) + ' }'
+        print(payload)
+        myMQTTClient.publish("thing01/data", payload, 0)
+        
 
 
 
     #Change the unit from Celcius to Fahrenheit or vice-versa
     def changetempunit(self):
-#        global tempunit
-#        if tempunit == "C":
-#            tempunit=tempunit.replace("C","F")
-#            self.ctof.setText("F To C")
-#            self.HTtempscroll.setValue( (self.HTtempscroll.value()*9)/5 +32)
-#            self.LTtempscroll.setValue( (self.LTtempscroll.value()*9)/5 +32)
-#        else:
-#            self.ctof.setText("C To F")
-#            tempunit=tempunit.replace("F","C")
-#            self.HTtempscroll.setValue(((self.HTtempscroll.value()-32)*5)/9)
-#            self.LTtempscroll.setValue(((self.LTtempscroll.value()-32)*5)/9)
-#def changetempunit(self):
+
         global tempunit,temperature,humidity,tempc,tempf,count
         
         datetimeobj1=datetime.now()
