@@ -60,7 +60,7 @@ myMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
 
 #connect and publish
 myMQTTClient.connect()
-myMQTTClient.publish("thing01/info", "connected", 0)
+myMQTTClient.publish("Project3sub/info", "connected", 0)
 
 class TornadoServer(tornado.web.Application):
     def __init__(self):
@@ -181,7 +181,7 @@ class Ui_MainWindow(object):
         
         payload = '{"timestamp": "' + now_str + ',"temperature": ' + str(round(temperature,2)) + ',"humidity": '+ str(round(humidity,1)) + ' }'
         print(payload)
-        myMQTTClient.publish("thing01/data", payload, 0)
+        myMQTTClient.publish("Project3sub/data", payload, 0)
         
 
 
@@ -269,9 +269,17 @@ class Ui_MainWindow(object):
         self.Alarm.setDisabled(1)
         self.sensor()
         datetimeobj1=datetime.now()
+        now = datetime.utcnow()
+        now_str = now.strftime('%Y-%m-%dT%H:%M:%SZ')
         formatted_time = datetimeobj1.strftime('%H:%M:%S')
         if disconnectflag == 0:
             self.statusedit.setPlainText("    Reading: "+str(count)+"\n\n"+"    Time: "+str(datetimeobj1.hour)+":"+str(datetimeobj1.minute)+":"+str(datetimeobj1.second)+"\n\n"+"    Temperature: "+str(round(temperature,2))+" "+tempunit + "\n\n" +"    Humidity: "+str(round(humidity,1))+" "+"%")
+
+            #setting data for Lambda
+            payload = '{"timestamp": "' + now_str + ',"temperature": ' + str(round(temperature,2)) + ',"humidity": '+ str(round(humidity,1)) + ' }'
+            print(payload)
+            myMQTTClient.publish("Project3sub/data", payload, 0)
+
 
             mydb.add_values_db(tempc, tempf, humidity, formatted_time)
 
@@ -279,6 +287,16 @@ class Ui_MainWindow(object):
                 self.Alarm.setEnabled(1)
                 self.Alarm.setText("\n            !!ALARM!! ")
                 self.Alarm.text()
+                if temperature>self.HTtempscroll.value():
+                    payload = '{"timestamp": "' + now_str + ',"temperature alert": ' + str(self.HTtempscroll.value())  +',"temperature trigger": ' + str(round(temperature,2)) + ' }'
+                    print(payload)
+                    myMQTTClient.publish("Project3sub/alert", payload, 0)
+                    
+                if humidity>self.HThumscroll.value():
+                    payload = '{"timestamp": "' + now_str + ',"humidity alert": '+ str(self.HThumscroll.value()) + ',"humidity trigger": '+ str(round(humidity,1)) + ' }'
+                    print(payload)
+                    myMQTTClient.publish("Project3sub/alert", payload, 0)
+                
             if self.HThumscroll.value()<=self.LThumscroll.value():
                 self.Alarm.setEnabled(1)
                 self.Alarm.setText("\n Check Humidity Threshold")
