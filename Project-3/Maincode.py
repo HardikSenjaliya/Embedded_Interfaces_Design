@@ -35,6 +35,7 @@ import sys
 import os
 import MySQLdb
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
+import json
 
 #global variables
 
@@ -60,7 +61,7 @@ myMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
 
 #connect and publish
 myMQTTClient.connect()
-myMQTTClient.publish("Project3sub/info", "connected", 0)
+#myMQTTClient.publish("Project3sub", "connected", 0)
 
 class TornadoServer(tornado.web.Application):
     def __init__(self):
@@ -179,9 +180,10 @@ class Ui_MainWindow(object):
         self.humval.setText("    "+str(round(humidity,1))+" "+"%")
         self.humval.text()
         
-        payload = '{"timestamp": "' + now_str + ',"temperature": ' + str(round(temperature,2)) + ',"humidity": '+ str(round(humidity,1)) + ' }'
-        print(payload)
-        myMQTTClient.publish("Project3sub/data", payload, 0)
+        payload = '{"Topic" : "Data", "Timestamp": "'+ now_str +'","temperature": '+str(round(temperature,2))+' ,"humidity": '+str(round(humidity,1)) +' }'
+        payload_json = json.dumps(payload)
+        print(payload_json)
+        myMQTTClient.publish("Project3sub", payload_json, 0)
         
 
 
@@ -276,9 +278,9 @@ class Ui_MainWindow(object):
             self.statusedit.setPlainText("    Reading: "+str(count)+"\n\n"+"    Time: "+str(datetimeobj1.hour)+":"+str(datetimeobj1.minute)+":"+str(datetimeobj1.second)+"\n\n"+"    Temperature: "+str(round(temperature,2))+" "+tempunit + "\n\n" +"    Humidity: "+str(round(humidity,1))+" "+"%")
 
             #setting data for Lambda
-            payload = '{"timestamp": "' + now_str + ',"temperature": ' + str(round(temperature,2)) + ',"humidity": '+ str(round(humidity,1)) + ' }'
+            payload = '{"Topic" : "Data","Timestamp": "' + now_str + '" ,"temperature": ' + str(round(temperature,2)) + ',"humidity": '+ str(round(humidity,1)) +'}'
             print(payload)
-            myMQTTClient.publish("Project3sub/data", payload, 0)
+            myMQTTClient.publish("Project3sub", payload, 0)
 
 
             mydb.add_values_db(tempc, tempf, humidity, formatted_time)
@@ -288,14 +290,14 @@ class Ui_MainWindow(object):
                 self.Alarm.setText("\n            !!ALARM!! ")
                 self.Alarm.text()
                 if temperature>self.HTtempscroll.value():
-                    payload = '{"timestamp": "' + now_str + ',"temperature alert": ' + str(self.HTtempscroll.value())  +',"temperature trigger": ' + str(round(temperature,2)) + ' }'
+                    payload = '{"Topic" : "Alert","Timestamp": "' + now_str + '","temperature alert": ' + str(self.HTtempscroll.value())  +',"temperature trigger": ' + str(round(temperature,2)) + ' }'
                     print(payload)
-                    myMQTTClient.publish("Project3sub/alert", payload, 0)
+                    myMQTTClient.publish("Project3sub", payload, 0)
                     
                 if humidity>self.HThumscroll.value():
-                    payload = '{"timestamp": "' + now_str + ',"humidity alert": '+ str(self.HThumscroll.value()) + ',"humidity trigger": '+ str(round(humidity,1)) + ' }'
+                    payload = '{"Topic" : "Alert","Timestamp": "' + now_str + '","humidity alert": '+ str(self.HThumscroll.value()) + ',"humidity trigger": '+ str(round(humidity,1)) + ' }'
                     print(payload)
-                    myMQTTClient.publish("Project3sub/alert", payload, 0)
+                    myMQTTClient.publish("Project3sub", payload, 0)
                 
             if self.HThumscroll.value()<=self.LThumscroll.value():
                 self.Alarm.setEnabled(1)
