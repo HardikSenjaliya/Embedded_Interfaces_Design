@@ -181,9 +181,8 @@ class Ui_MainWindow(object):
         self.humval.text()
         
         payload = '{"Topic" : "Data", "Timestamp": "'+ now_str +'","temperature": '+str(round(temperature,2))+' ,"humidity": '+str(round(humidity,1)) +' }'
-        payload_json = json.dumps(payload)
-        print(payload_json)
-        myMQTTClient.publish("Project3sub", payload_json, 0)
+        print(payload)
+        myMQTTClient.publish("Project3sub", payload, 0)
         
 
 
