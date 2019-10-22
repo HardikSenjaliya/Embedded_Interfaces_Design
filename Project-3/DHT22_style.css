@@ -163,6 +163,50 @@ h1 {
     top: 25px;
 }
 
+.single-sqs{
+  position:absolute;
+  left: 200px;
+  top: 50px;
+}
+
+.all-sqs{
+  position: absolute;
+  left: 400px;
+  top: 50px;
+}
+
+.num-messages{
+    position: absolute;;
+    right: 200px;
+    top: 100px;
+}
+
+#message-count{
+
+	position: absolute;
+	right: 200px;
+	top: 150px;
+}
+
+#label_sqs_data_table{
+  position: absolute;
+  left: 200px;
+  top: 100px;
+}
+
+#sqs_data_table{
+  position: absolute;
+  top: 175px;
+  left: 200px;
+  border-collapse: collapse;
+  width: 10%;
+  border: 3px solid white;
+  font-size: 18px;
+  color: green;
+  font-weight: bold;
+}
+
+
 #sensor_status{
     position: absolute;
     left: 200px;

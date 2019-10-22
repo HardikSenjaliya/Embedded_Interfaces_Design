@@ -4,6 +4,7 @@
 <title>DHT22 Sensor</title>
 <head> 
     <link rel="stylesheet" href="DHT22_style.css">
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.553.0.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="my_jquery.js"></script>
 
@@ -17,7 +18,7 @@
             <h1>DHT22 - Client</h1>
         </article>
         
-        <div class="page">
+        <div class="page_proj2">
         <!-- Button and Text Box for Getting Latest Values from Tornado -->
         <button class="buttons get-vals-tornado" >Get Values from Tornado</button>
         <label class="labels" id="label_output-vals-temp" for="output-vals-temp">Temperature</label>
@@ -76,8 +77,25 @@
         <button class="buttons clear-data" >Clear</button>
         
         <input class="text_box" type="text" maxlength="20" size="10" id="sensor_status" disabled> 
-        </div>
+        
         <button class="buttons log-in" >Connect</button>
+
+        </div>
+        
+
+    </div>
+
+    <div class="page_proj3">
+
+    	<button class="buttons single-sqs" >Signle SQS</button>
+        <button class="buttons all-sqs" >All SQS</button>
+        <button class="buttons num-messages" >Get Message Count</button>
+    
+        <h2 class="labels" id="label_sqs_data_table">Last 20 Data from SQS</h2>
+        <table id="sqs_data_table">
+        </table>
+        
+    	<input class="text_box" type="text" maxlength="20" size="10" id="message-count" disabled> 
 
     </div>
 
