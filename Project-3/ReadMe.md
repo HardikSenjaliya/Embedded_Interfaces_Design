@@ -13,9 +13,10 @@
 3. Install python3 and other libraries for mysql, matplotlib to function.
 4. The project contains one driver file *Maincode.py* which shall run on the command *./P3init.sh* (bash script to start-up the Project 3 code) and hence initiate the GUI and connect with the MQTT client (also publish the payloads).
    It contains all the primary functions for getting the real-time sensor values, and generating the data and alert payloads for sending over to the lambda service.
-5. The GUI send data payload on every 15 seconds and on demanding the real time values, also the alert payload is sent when the temperature or humidity goes higher than the higher threshold   set on the GUI- based on which the HTML shall report a single SQS message or a list of 20 messages when demanded by the user or the number of messages in the SQS Queue at that moment and SNS shall send a message or an email to alert the user based on the alert level.
-6. The client also involves a button to convert the temperature units in the displayed tables.
-7. On terminating the script with Ctrl+C, the code shall clean up with all values cleared and all processes terminated.
+5. The GUI send data payload on every 15 seconds and on demanding the real time values, also the alert payload is sent when the temperature or humidity goes higher than the higher threshold   set on the GUI- based on which the HTML shall report a single SQS message or a list of all messages (limited to 20) when demanded by the user or the number of messages in the SQS Queue at that moment and SNS shall send a message or an email to alert the user based on the alert level.
+6. The system will be posting the messages from the SQS queue in a table on the client, that shall append with one message at a time for the "get one SQS message" button and with all SQS messages for the "get all messages" button.
+7. The client also involves a button to convert the temperature units in the displayed tables.
+8. On terminating the script with Ctrl+C, the code shall clean up with all values cleared and all processes terminated.
 
 
 ##### Project Work:
