@@ -310,6 +310,9 @@ class Ui_MainWindow(object):
         else:
             mydb.add_values_db(tempc, tempf, humidity, formatted_time)
             self.statusedit.setPlainText("\n\n    SENSOR DISCONNECTED!! ")
+            payload = '{"Topic" : "Alert","Status": "Disconnected" }'
+            print(payload)
+            myMQTTClient.publish("Project3sub", payload, 0)
 
     #Counts to 30 for timer to stop
     def counter(self):
