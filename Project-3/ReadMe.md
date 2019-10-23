@@ -32,6 +32,7 @@ While both contributed in the design of the GUI, we also had our own ideas for t
 1. The project includes alert payloads to be displayed not only as a message but also to an email as programmed into the rule for temperature and humidity alerts both.
 2. The extra credit has been also added to the system to display the number of messages in the SQS queue on prompted by the user via a button.
 3. IoT core and Lambda work together to handle a particular error condition such that if the lambda function is not correctly evoked after the payload has been published then the payload shall be re-published into the IoT error topic as a way to log that error.
+4. On disconneection of the sensor, an alert message shall be sent via SNS to inform the user.
 
 ##### Project Issues:
 
