@@ -20,6 +20,7 @@
         var start_time_nj = 0;
         var end_time_nj = 0;
         var time_diff_nj = 0;
+        var curr_unit = 0;
 
         // Project 3 Aws Things
       
@@ -36,6 +37,7 @@
         const queueUrl = 'https://sqs.us-east-1.amazonaws.com/595492067297/mySQSQueue';
         var num_reading = 1;
         var available_messages = 0;
+        var table_row = 1;
 
         const one_message_params = {
             QueueUrl: queueUrl,
@@ -159,6 +161,38 @@
             $('#message-count').val(available_messages);
             available_messages = 0;
         });
+        
+        
+        $(".unit-change").click(function () {
+        	
+        	table_row = $('#sqs_data_table tr').length;
+        	console.log('Number of Table rows:', table_row);
+        		
+			var sqs_table = document.getElementById('sqs_data_table');
+
+			if(curr_unit == 0){
+				curr_unit = 1;			
+			for(i = 1; i < table_row; i++){
+				var cells = sqs_table.rows.item(i).cells;
+				var tempC = cells.item(1).innerHTML;
+				console.log('value:', tempC);			
+				cells.item(1).innerHTML = (tempC * (9/5) + 32).toFixed(2);				
+			}}else{        		
+				curr_unit = 0;			
+			for(i = 1; i < table_row; i++){
+				var cells = sqs_table.rows.item(i).cells;
+				var tempF = cells.item(1).innerHTML;
+				console.log('value:', tempC);			
+				cells.item(1).innerHTML = ((tempF - 32) * (5/9)).toFixed(2);				
+			}}  		
+       
+        });
+
+			$(".clear-data").click(function (){
+
+				   $('#sqs_data_table > tr').remove();     	
+        			$('#message-count').val('');
+        	});
 
 
         $(".log-in").click(function (){

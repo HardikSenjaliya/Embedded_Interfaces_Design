@@ -154,7 +154,7 @@ h1 {
 .clear-data{
   position: absolute;
   bottom: 25px;
-  right: 850px;
+  right: 200px;
 }
 
 .log-in{
@@ -185,7 +185,13 @@ h1 {
 
 	position: absolute;
 	right: 200px;
-	top: 150px;
+	top: 175px;
+}
+
+.unit-change{
+	position: absolute;
+	left: 600px;
+	top: 50px;
 }
 
 #label_sqs_data_table{
