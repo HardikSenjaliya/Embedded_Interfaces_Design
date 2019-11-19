@@ -65,7 +65,7 @@ def get_distance():
 if __name__ == '__main__':
     
     capture_image()
-    setup_distance_sensor()
+#    setup_distance_sensor()
     
     try:
         while True:
