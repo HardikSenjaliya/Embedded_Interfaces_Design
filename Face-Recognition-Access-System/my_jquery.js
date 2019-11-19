@@ -11,6 +11,29 @@ $(document).ready(function(){
     $("#lockimg").hide();
     $("#unlockimg").hide();
     
+   define(function (require) {
+   	 var AWS = require('aws-sdk');
+	}); 
+	
+	function AnonLog() {
+    
+    //Initialize the Amazon Cognito credentials provider
+	AWS.config.region = 'us-east-1'; // Region
+	AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+   	IdentityPoolId: 'us-east-1:396a93f3-98af-4c19-ba4a-ca11dff8f653',	
+	});
+    
+    // Make the call to obtain credentials
+    AWS.config.credentials.get(function () {
+      // Credentials will be available when this function is called.
+      var accessKeyId = AWS.config.credentials.accessKeyId;
+      var secretAccessKey = AWS.config.credentials.secretAccessKey;
+      var sessionToken = AWS.config.credentials.sessionToken;
+    });
+  }	
+	
+	
+    
     $(".connect").click(function (){
         
         var un = $("#username").val();
@@ -79,6 +102,23 @@ $(document).ready(function(){
             $(".login").show();
             $(".connect").show();
 
+        });
+        
+        
+        $(".add-user").click(function(){
+        	
+				AnonLog();        	
+        	
+        		AWS.config.update({region: 'us-east-1'});
+        
+        		// Create S3 service object
+				s3 = new AWS.S3({apiVersion: '2006-03-01'});				
+ 			   
+ 				s3.listBuckets(function(err, data) {
+  						if (err) console.log(err, err.stack); // an error occurred
+  						else     console.log(data);           // successful response
+				});    
+        
         });
             
             
