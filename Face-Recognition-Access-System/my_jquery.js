@@ -5,9 +5,11 @@ $(document).ready(function(){
     var host = "localhost";
     var port = "8888";
     var uri = "/ws";
+    var lockstat = 0;
     
     $(".project").hide();
-    $(".unlocked").hide();
+    $("#lockimg").hide();
+    $("#unlockimg").hide();
     
     $(".connect").click(function (){
         
@@ -21,9 +23,16 @@ $(document).ready(function(){
             // create websocket instance
             console.log("Connected to system");
             wst = new WebSocket("ws://" + host + ":" + port + uri);  //tornado
+            $("#username").val('');
+            $("#password").val('');
             $(".connect").hide();
         
             $(".login").hide();
+            
+            if(lockstat == 1)
+                $("#unlockimg").show();
+            else
+                $("#lockimg").show();
         
             $(".project").show();
             
@@ -32,8 +41,8 @@ $(document).ready(function(){
         else{
 
             console.log("Fill in the correct credentials..");
-            $("#username").val(' ');
-            $("#password").val(' ');
+            $("#username").val('');
+            $("#password").val('');
         }
         
         // Handle incoming websocket message callback
@@ -41,17 +50,37 @@ $(document).ready(function(){
             
             console.log("Locked");
             $("#unlock-name").val('Force Lock');
-            $(".unlocked").hide();
+            $("#unlockimg").hide();
             $("#lockimg").show();
+            lockstat=0;
         });
                         
         $(".force-unlock-door").click(function (){
             
             console.log("Unlocked");
-            $(".unlocked").show();
+            $("#unlockimg").show();
             $("#unlock-name").val('Force Unlock');
             $("#lockimg").hide();
+            lockstat=1;
         });
+        
+        
+        $(".logout").click(function (){
+            
+            console.log("Logged Out");
+            $("#username").val('');
+            $("#password").val('');
+            $("#add-remove-status").val('');
+
+
+            $(".project").hide();
+            $("#lockimg").hide();
+            $("#unlockimg").hide();
+            $(".login").show();
+            $(".connect").show();
+
+        });
+            
             
 
         
