@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html>
+<title>Face Recognition Access System</title>
+<head> 
+    <link rel="stylesheet" href="EIDClient.css">
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.553.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="my_jquery.js"></script>
+
+
+</head>
+<body>
+
+<section class="container">
+    <div class="gui">
+        <article>
+            <h1>Face Recognition Access System</h1>
+        </article>
+        
+        <div class="project">
+
+        <!--Button for Force Lock/Unlock Door-->
+        <button class="buttons force-lock-door" >Force Lock Door</button>
+        <button class="buttons force-unlock-door" >Force Unlock Door</button>
+        <button class="buttons add-user" >Add User</button>
+        <button class="buttons remove-user" >Remove User</button>
+        <button class="buttons get-database" >Get User Database</button>
+        <input class="text_box" id="add-remove-status" type="text">
+        <label class="labels user-label">By :</label>
+        <input class="text_box" id="unlock-name" type="text">
+        <label class="labels status-label">Door Status :</label>
+        <img class="image" src="lock.png" id="lockimg">
+        
+        </div>
+        
+        <div class="unlocked">
+
+        <!--img class="image" src="arrow.png"-->
+        <img class="image" src="unlock.png">
+        
+        </div>    
+        
+        <div class="login">
+            
+        <form class="form" method="post" action="#">
+        
+        <!-- Login Page -->
+
+        <label class="labels username-label">Username :</label>
+        <input class="text_box" id="username" type="text">
+        <label class="labels password-label">Password :</label>
+        <input class="text_box" id="password" type="password">
+        
+        
+        </form>
+        </div>
+        
+        <button class="buttons connect" >Connect</button>
+
+
+</section>
+     
+</body>
+
+</html>
