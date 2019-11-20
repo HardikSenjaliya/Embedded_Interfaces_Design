@@ -237,5 +237,52 @@ h1 {
 
 }
 
+#userName{
+	width: 10%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border-radius: 25px;
+  text-align: center;
+  font-size: large;
+  position: absolute;
+  left: 900px;
+  top: 380px;
+}
 
+#userPhoto{
+  width: 10%;
+  height: 5%;
+  position: absolute;
+  left: 900px;
+  top: 310px;
+}
+
+.photoLabel{
+ 
+  position: absolute;
+  left: 750px;
+  top: 300px;
+}
+
+.nameLabel{
+ 
+  position: absolute;
+  left: 750px;
+  top: 400px;
+}
+
+.submit{
+
+	position: absolute;
+	left: 750px;
+	top: 500px;
+}
+
+.homePage{
+	
+	position: absolute;
+	left: 950px;
+	top: 500px;
+}
 
