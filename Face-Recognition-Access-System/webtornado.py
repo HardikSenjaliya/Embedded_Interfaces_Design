@@ -19,14 +19,6 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         
         
         data = message
-        
-       # eidDB = MySQLdb.connect(host="localhost",
-        #             user="hardyk",
-         #            passwd="mysql123",
-          #           database="EID_projectDB"
-      #  )
-
-       # mycur = eidDB.cursor()
 
         
  
