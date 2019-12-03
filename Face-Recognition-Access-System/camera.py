@@ -6,6 +6,12 @@ import time
 import datetime
 import picamera
 
+#set GPIO Pins
+GPIO_TRIGGER = 18
+GPIO_ECHO = 24
+servoPIN = 17
+ 
+
 def capture_image():
 #with picamera.PiCamera() as camera:
     camera = picamera.PiCamera()
@@ -27,13 +33,15 @@ def setup_distance_sensor():
     #GPIO Mode (BOARD / BCM)
     GPIO.setmode(GPIO.BCM)
  
-    #set GPIO Pins
-    GPIO_TRIGGER = 18
-    GPIO_ECHO = 24
- 
+
     #set GPIO direction (IN / OUT)
     GPIO.setup(GPIO_TRIGGER, GPIO.OUT)
     GPIO.setup(GPIO_ECHO, GPIO.IN)
+    
+def setup_servo():
+
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(servoPIN, GPIO.OUT)
  
 def get_distance():
     # set Trigger to HIGH
@@ -64,18 +72,19 @@ def get_distance():
  
 if __name__ == '__main__':
     
-    capture_image()
-#    setup_distance_sensor()
+    
+    setup_distance_sensor()
     
     try:
         while True:
             dist = get_distance()
             print ("Measured Distance = %.1f cm" % dist)
-            if(dist < 5):
+            if(dist < 80):
                 capture_image()
+                break
             time.sleep(1)
  
-        # Reset by pressing CTRL + C
+    # Reset by pressing CTRL + C
     except KeyboardInterrupt:
         print("Measurement stopped by User")
         GPIO.cleanup()
