@@ -3,13 +3,14 @@ $(document).ready(function(){
     //tornado globals
     var wst;
     var host = "localhost";
-    var port = "8888";
+    var port = "8889";
     var uri = "/ws";
     var lockstat = 0;
     var photo;
-    	    
-    // create websocket instance
+    var wait =1;
 
+
+    // create websocket instance
     wst = new WebSocket("ws://" + host + ":" + port + uri);  //tornado
 	    
     $(".project").hide();
@@ -103,12 +104,11 @@ $(document).ready(function(){
 	
     }
    
-   
-   
-   
 
     
     $(".connect").click(function (){
+        
+
 	
 	var un = $("#username").val();
 	var pw = $("#password").val ();
@@ -117,7 +117,8 @@ $(document).ready(function(){
 	    console.log("Fill in the values to login..");
 	
 	if(un == "admin" && pw == "1234"){
-	    console.log("Connected to system");
+            	    
+	    console.log("Login successful");
 	    $("#username").val('');
 	    $("#password").val('');
 	    $(".connect").hide();
@@ -131,6 +132,7 @@ $(document).ready(function(){
 		
 	
 	    $(".project").show();
+
 	    
 	}
 	
@@ -140,10 +142,39 @@ $(document).ready(function(){
 	    $("#username").val('');
 	    $("#password").val('');
 	}
-	
-       });
-       
-       
+    
+    
+     wst.onmessage = function(evt) {
+
+         
+        var rcvd_message = evt.data;
+         
+         
+         
+        if(rcvd_message == "Lock"){
+                
+            console.log("Locked");
+            $("#unlock-name").val(" ");
+            $("#unlockimg").hide();
+            $("#lockimg").show();
+            lockstat=0;
+            
+        }
+        else{
+    
+            console.log("Unlocked");
+            $("#unlockimg").show();
+            $("#unlock-name").val(rcvd_message);
+            $("#lockimg").hide();
+            lockstat=1;
+        }
+         
+    };
+        
+    });
+    
+    
+
        
        
        
