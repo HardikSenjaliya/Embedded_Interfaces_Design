@@ -37,7 +37,7 @@ rekoClient = boto3.client('rekognition')
 
 statust = ' '
 stat=0
-count = 0
+
 
 class WSHandler(tornado.websocket.WebSocketHandler):
     
@@ -49,14 +49,16 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         
         while True:
 
-            time.sleep(2)
-            count = count + 1
-            if(statust == 'no'):
+            time.sleep(4)
+            print("TORNADO..")
+
+            if(statust == 'no' or stat==0):
                 print("Lock on Client")
+
                 self.write_message("Lock")
                 
             else:
-                #print("Unlock on Client")
+                print("Unlock on Client")
                 stat=0
                 self.write_message(statust)
 
@@ -106,21 +108,25 @@ class cameraclass(object):
         timestamp = datetime.datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
         # Finally, take several photos with the fixed settings
         camera.capture(timestamp + '.jpg')
+
         
-        return (timestamp+'.jpg')
+        local_image = (timestamp+'.jpg')
+        #local_image = 'Hardik_Portrait.JPG'
         
-    def setup_distance_sensor(self):    
-        #GPIO Mode (BOARD / BCM)
-        GPIO.setmode(GPIO.BCM)
+        print ("Captured")
+        print(local_image)
+              
+        cam.find_face_in_collection(bucket_name, local_image, collection_id, camera)
+  
+
      
-    
+    def get_distance(self):
+        GPIO.setmode(GPIO.BCM)
         #set GPIO direction (IN / OUT)
         GPIO.setup(GPIO_TRIGGER, GPIO.OUT)
         GPIO.setup(GPIO_ECHO, GPIO.IN)
         
     
-     
-    def get_distance(self):
         # set Trigger to HIGH
         GPIO.output(GPIO_TRIGGER, True)
      
@@ -146,8 +152,8 @@ class cameraclass(object):
         distance = (TimeElapsed * 34300) / 2
      
         return distance
-    
-    def find_face_in_collection(self,bucket, image, collection_id):
+                    
+    def find_face_in_collection(self,bucket, image, collection_id, camera):
         
         global statust,stat
     #
@@ -164,8 +170,8 @@ class cameraclass(object):
     
     
         faceMatches=response['FaceMatches']
-        print ('Matching faces')
-        
+        print ('Matching faces ...')
+        stat=0
         for match in faceMatches:
                 print ('FaceId:' + match['Face']['FaceId'])
                 print('Name:' + match['Face']['ExternalImageId'])
@@ -177,11 +183,15 @@ class cameraclass(object):
                     stat=1
                     p.ChangeDutyCycle(12.5)
                     time.sleep(5)
-                    p.stop()
-                    GPIO.cleanup()
+                    
+
+                    image = ''
         
         if(stat==0):
             statust= 'no'
+
+            
+        camera.close()
         
     
     def upload_to_aws(self,local_image, bucket, s3_file):
@@ -215,22 +225,20 @@ def runtornado():
     
 def runcam():
     
-    
-    cam.setup_distance_sensor()
+    global stat
+
     cam.setup_servo()
     
     try:
         while True:
             dist = cam.get_distance()
-            #print ("Measured Distance = %.1f cm" % dist)
-            if(dist < 800):
-                #local_image = cam.capture_image()
-                local_image = 'isha.jpg'
-                print ("Captured")
-                
-                #local_image = 'isha.jpg'
-                cam.find_face_in_collection(bucket_name, local_image, collection_id)
-                
+            print ("Measured Distance = %.1f cm" % dist)
+            if(dist < 80):
+                cam.capture_image()
+            else:
+                p.ChangeDutyCycle(2.5)
+                time.sleep(2)
+
             time.sleep(5)
     
     # Reset by pressing CTRL + C

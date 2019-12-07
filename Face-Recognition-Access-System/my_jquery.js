@@ -5,13 +5,11 @@ $(document).ready(function(){
     var host = "localhost";
     var port = "8889";
     var uri = "/ws";
-    var lockstat = 0;
+    var lockstat = 2;
     var photo;
     var wait =1;
 
 
-    // create websocket instance
-    wst = new WebSocket("ws://" + host + ":" + port + uri);  //tornado
 	    
     $(".project").hide();
     $("#lockimg").hide();
@@ -117,6 +115,10 @@ $(document).ready(function(){
 	    console.log("Fill in the values to login..");
 	
 	if(un == "admin" && pw == "1234"){
+        
+        
+       // create websocket instance
+        wst = new WebSocket("ws://" + host + ":" + port + uri);  //tornado
             	    
 	    console.log("Login successful");
 	    $("#username").val('');
@@ -124,11 +126,9 @@ $(document).ready(function(){
 	    $(".connect").hide();
 	
 	    $(".login").hide();
-	    
-	    if(lockstat == 1)
-		$("#unlockimg").show();
-	    if(lockstat == 0)
+        $("#unlockimg").hide();
 		$("#lockimg").show();
+        
 		
 	
 	    $(".project").show();
@@ -149,24 +149,34 @@ $(document).ready(function(){
          
         var rcvd_message = evt.data;
          
+        if(lockstat == 0)
+        {
+            $("#unlock-name").val('Force Lock');
+        }
+        
+        else if(lockstat == 1)
+        {
+            $("#unlock-name").val('Force Unlock');
+        }
          
-         
-        if(rcvd_message == "Lock"){
+        else if(rcvd_message == "Lock" && lockstat != 1){
                 
             console.log("Locked");
             $("#unlock-name").val(" ");
             $("#unlockimg").hide();
             $("#lockimg").show();
-            lockstat=0;
+            
             
         }
         else{
-    
-            console.log("Unlocked");
-            $("#unlockimg").show();
-            $("#unlock-name").val(rcvd_message);
-            $("#lockimg").hide();
-            lockstat=1;
+            if(lockstat !=0){
+        
+                console.log("Unlocked");
+                $("#unlockimg").show();
+                $("#unlock-name").val(rcvd_message);
+                $("#lockimg").hide();
+                
+            }
         }
          
     };
@@ -175,8 +185,6 @@ $(document).ready(function(){
     
     
 
-       
-       
        
 	
 	// Handle incoming websocket message callback
