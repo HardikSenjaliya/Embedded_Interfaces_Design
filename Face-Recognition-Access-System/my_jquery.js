@@ -6,7 +6,6 @@ $(document).ready(function(){
     var port = "8889";
     var uri = "/ws";
     var lockstat = 2;
-    var photo;
     var wait =1;
 
 
@@ -56,6 +55,7 @@ $(document).ready(function(){
 
 
     function addPhoto(userName) {
+    
       var files = document.getElementById("userPhoto").files;
       if (!files.length) {
 	return alert("Please choose a file to upload first.");
@@ -76,6 +76,7 @@ $(document).ready(function(){
 	    throw err;
 	}
 	console.log(`File uploaded successfully. ${data.Location}`);
+    $("#add-remove-status1").val('File added');
     });
 
     }
@@ -97,6 +98,7 @@ $(document).ready(function(){
 		throw err;
 	    }
 	    console.log(`File deleted successfully`);
+        $("#add-remove-status2").val('File deleted');
     });
 
 	
@@ -107,7 +109,6 @@ $(document).ready(function(){
     $(".connect").click(function (){
         
 
-	
 	var un = $("#username").val();
 	var pw = $("#password").val ();
 	
@@ -168,6 +169,10 @@ $(document).ready(function(){
             
             
         }
+        else if(rcvd_message == "Get Database"){
+            //print
+            console.log("Fetching database...");
+        }
         else{
             if(lockstat !=0){
         
@@ -183,7 +188,11 @@ $(document).ready(function(){
         
     });
     
-    
+	$(".get-database").click(function (){
+	    
+	    console.log("Displaying database");
+	    wst.send("Get Database");
+	});    
 
        
 	
@@ -225,23 +234,28 @@ $(document).ready(function(){
 	
 	
 	$(".add-user").click(function () {
-	    photo=1;
 	    console.log("Add User");
 	    window.location.href = 'adduser.html';
 	     
 	});
 	
-	$(".submit").click(function () {
+	$(".submit1").click(function () {
+
+	    var userName = $("#userName").val();
+        addPhoto(userName);	
+        
+
+	}); 
+    
+    $(".submit2").click(function () {
 	
 	    var userName = $("#userName").val();
-	    if(photo == 1)
-		addPhoto(userName);	
-	    else
+
 		removePhoto(userName);
 	}); 
 	
 	$(".remove-user").click(function () {
-	    photo=0;
+
 	    console.log("Remove User");
 	    window.location.href = 'removeuser.html';
 

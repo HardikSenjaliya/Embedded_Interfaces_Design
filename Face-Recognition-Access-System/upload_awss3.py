@@ -176,7 +176,7 @@ class cameraclass(object):
                 print ('FaceId:' + match['Face']['FaceId'])
                 print('Name:' + match['Face']['ExternalImageId'])
                 print ('Similarity: ' + "{:.2f}".format(match['Similarity']) + "%")
-                if(match['Similarity'] > 97):
+                if(match['Similarity'] > 80):
                     print('Unlock')
                     statust= match['Face']['ExternalImageId']
                     statust = statust[:-4] 
@@ -233,7 +233,7 @@ def runcam():
         while True:
             dist = cam.get_distance()
             print ("Measured Distance = %.1f cm" % dist)
-            if(dist < 80):
+            if(dist < 60):
                 cam.capture_image()
             else:
                 p.ChangeDutyCycle(2.5)

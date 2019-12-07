@@ -158,14 +158,24 @@ h1 {
 
 }
 
-#add-remove-status{
-  width: 20%;
+#add-remove-status1{
+  width: 30%;
   height: 10%;
   position: absolute;
-  right: 800px;
-  top: 750px;
+  right: 670px;
+  top: 600px;
 
 }
+
+#add-remove-status2{
+  width: 30%;
+  height: 10%;
+  position: absolute;
+  right: 670px;
+  top: 600px;
+
+}
+
 
 .labels{
   font-size: 2.5rem;
@@ -265,14 +275,28 @@ h1 {
   top: 300px;
 }
 
-.nameLabel{
+.nameLabel1{
  
   position: absolute;
   left: 750px;
   top: 400px;
 }
 
-.submit{
+.nameLabel2{
+ 
+  position: absolute;
+  left: 750px;
+  top: 400px;
+}
+
+.submit1{
+
+	position: absolute;
+	left: 750px;
+	top: 500px;
+}
+
+.submit2{
 
 	position: absolute;
 	left: 750px;
