@@ -121,7 +121,7 @@ h1 {
 .get-database{
   background-color: black;
   position: absolute;
-  right: 150px;
+  right: 100px;
   top: 100px;
 }
 
@@ -216,13 +216,13 @@ h1 {
 
 .status-label{
   position: absolute;
-  left: 700px;
+  left: 600px;
   top: 150px;
 }
 
 .user-label{
   position: absolute;
-  left: 1100px;
+  left: 950px;
   top: 150px;
 }
 
@@ -233,7 +233,7 @@ h1 {
   margin: 4px 2px;
   border-radius: 25px;
   position: absolute;
-  left: 700px;
+  left: 600px;
   top: 200px;
 
 }
@@ -242,7 +242,7 @@ h1 {
   width: 20%;
   height: 10%;
   position: absolute;
-  left: 1000px;
+  left: 900px;
   top: 200px;
 
 }
@@ -310,3 +310,18 @@ h1 {
 	top: 500px;
 }
 
+#data_table{
+  position: absolute;
+  top: 250px;
+  right: 150px;
+  border-collapse: collapse;
+  width: 10%;
+  border: 3px solid white;
+  font-size: 25px;
+  color: white;
+  font-weight: bold;
+}
+
+#data_table tr{
+  border-bottom: 2px solid white;
+}

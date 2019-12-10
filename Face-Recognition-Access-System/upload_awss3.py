@@ -50,7 +50,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         while True:
 
             time.sleep(4)
-            print("TORNADO..")
+            #print("TORNADO..")
 
             if(statust == 'no' or stat==0):
                 print("Lock on Client")
@@ -61,18 +61,13 @@ class WSHandler(tornado.websocket.WebSocketHandler):
                 print("Unlock on Client")
                 stat=0
                 self.write_message(statust)
+                
 
       
     def on_message(self, message):
         
         
         data = message
-
-            
-       # if(message == "Connect"):
-
-                #self.write_message(statust)
-        
         
  
     def on_close(self):
@@ -155,13 +150,8 @@ class cameraclass(object):
                     
     def find_face_in_collection(self,bucket, image, collection_id, camera):
         
-        global statust,stat
-    #
-    #    response=rekoClient.search_faces_by_image(CollectionId=collection_id,
-    #                                Image={'S3Object':{'Bucket':bucket,'Name':image}},
-    #                                FaceMatchThreshold=threshold,
-    #                                MaxFaces=maxFaces)
-    #
+        global statust,stat        
+
         with open(image, 'rb') as image:
             response=rekoClient.search_faces_by_image(CollectionId=collection_id,
                                     Image={'Bytes': image.read()},
@@ -231,6 +221,7 @@ def runcam():
     
     try:
         while True:
+
             dist = cam.get_distance()
             print ("Measured Distance = %.1f cm" % dist)
             if(dist < 60):
