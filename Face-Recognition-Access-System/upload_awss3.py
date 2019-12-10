@@ -150,42 +150,50 @@ class cameraclass(object):
                     
     def find_face_in_collection(self,bucket, image, collection_id, camera):
         
-        global statust,stat        
+        global statust,stat   
+                    
+                
+        camera.close() #close the camera object
+        
+        try:     
 
-        with open(image, 'rb') as image:
-            response=rekoClient.search_faces_by_image(CollectionId=collection_id,
-                                    Image={'Bytes': image.read()},
-                                    FaceMatchThreshold=threshold,
-                                    MaxFaces=maxFaces)
-    
-    
-        faceMatches=response['FaceMatches']
-        if(len(faceMatches) < 1):
-            statust = 'no'
-            camera.close()
-            return
+            with open(image, 'rb') as image:
+                response=rekoClient.search_faces_by_image(CollectionId=collection_id,
+                                        Image={'Bytes': image.read()},
+                                        FaceMatchThreshold=threshold,
+                                        MaxFaces=maxFaces)
         
-        print ('Matching faces ...')
-        stat=0
-        for match in faceMatches:
-                print ('FaceId:' + match['Face']['FaceId'])
-                print('Name:' + match['Face']['ExternalImageId'])
-                print ('Similarity: ' + "{:.2f}".format(match['Similarity']) + "%")
-                if(match['Similarity'] > 80):
-                    print('Unlock')
-                    statust= match['Face']['ExternalImageId']
-                    statust = statust[:-4] 
-                    stat=1
-                    p.ChangeDutyCycle(12.5)
-                    time.sleep(5)
-                    image = ''
         
-        if(stat==0):
-            statust= 'no'
+            faceMatches=response['FaceMatches']
+            print ('Matching faces ...')
+            stat=0
+            for match in faceMatches:
+                    print ('FaceId:' + match['Face']['FaceId'])
+                    print('Name:' + match['Face']['ExternalImageId'])
+                    print ('Similarity: ' + "{:.2f}".format(match['Similarity']) + "%")
+                    if(match['Similarity'] > 80):
+                        print('Unlock')
+                        statust= match['Face']['ExternalImageId']
+                        statust = statust[:-4] 
+                        stat=1
+                        p.ChangeDutyCycle(12.5)
+                        time.sleep(5)
+                        
+    
+                        image = ''
+            
+            if(stat==0):
+                statust= 'no'
 
             
-        camera.close()
+            return True
         
+        except:
+            print("Make sure there is at least one face in the image")
+            
+            return False
+
+            
     
     def upload_to_aws(self,local_image, bucket, s3_file):
     
@@ -227,7 +235,7 @@ def runcam():
 
             dist = cam.get_distance()
             print ("Measured Distance = %.1f cm" % dist)
-            if(dist < 60):
+            if(dist < 200):
                 cam.capture_image()
             else:
                 p.ChangeDutyCycle(2.5)
