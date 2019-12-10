@@ -13,7 +13,7 @@ $(document).ready(function(){
     $(".project").hide();
     $("#lockimg").hide();
     $("#unlockimg").hide();
-    
+    $("#Message").hide();
    
    
     const bucket_name = 'eid-image-rekognition'
@@ -139,6 +139,8 @@ $(document).ready(function(){
 	    console.log("Fill in the correct credentials..");
 	    $("#username").val('');
 	    $("#password").val('');
+	    $("#Message").show();
+	    $("#Message").val('Enter again');
 	}
     
     
@@ -230,6 +232,8 @@ $(document).ready(function(){
 	$(".logout").click(function (){
 	    
 	    console.log("Logged Out");
+	    $("#Message").val('');
+	    $("#Message").hide();
 	    $("#username").val('');
 	    $("#password").val('');
 	    $("#add-remove-status").val('');

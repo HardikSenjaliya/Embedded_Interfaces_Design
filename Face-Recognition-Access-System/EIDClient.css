@@ -208,6 +208,15 @@ h1 {
   top: 450px;
 }
 
+#Message{
+  width: 15%;
+  height: 8%;
+  position: absolute;
+  right: 300px;
+  top: 370px;
+}
+
+
 .password-label{
   position: absolute;
   right: 1000px;
