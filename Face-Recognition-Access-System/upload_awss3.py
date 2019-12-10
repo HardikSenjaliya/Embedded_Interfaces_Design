@@ -160,6 +160,11 @@ class cameraclass(object):
     
     
         faceMatches=response['FaceMatches']
+        if(len(faceMatches) < 1):
+            statust = 'no'
+            camera.close()
+            return
+        
         print ('Matching faces ...')
         stat=0
         for match in faceMatches:
@@ -173,8 +178,6 @@ class cameraclass(object):
                     stat=1
                     p.ChangeDutyCycle(12.5)
                     time.sleep(5)
-                    
-
                     image = ''
         
         if(stat==0):
