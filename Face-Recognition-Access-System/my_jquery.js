@@ -7,6 +7,8 @@ $(document).ready(function(){
     var uri = "/ws";
     var lockstat = 2;
     var wait =1;
+
+
 		
     var database = [];
 	    
@@ -76,7 +78,7 @@ $(document).ready(function(){
 	    throw err;
 	}
 	console.log(`File uploaded successfully. ${data.Location}`);
-    $("#add-remove-status1").val('File added');
+    $("#add-remove-status1").val('User added');
     });
 
     }
@@ -98,7 +100,7 @@ $(document).ready(function(){
 		throw err;
 	    }
 	    console.log(`File deleted successfully`);
-	$("#add-remove-status2").val('File deleted');
+	$("#add-remove-status2").val('User deleted');
     });
 
 	
@@ -159,10 +161,10 @@ $(document).ready(function(){
 	    $("#unlock-name").val('Force Unlock');
 	}
 	 
-	else if(rcvd_message == "Lock" && lockstat != 1){
+	else if(rcvd_message == "Unrecognized" && lockstat != 1){
 		
 	    console.log("Locked");
-	    $("#unlock-name").val(" ");
+	    $("#unlock-name").val(rcvd_message);
 	    $("#unlockimg").hide();
 	    $("#lockimg").show();
 	    
@@ -261,7 +263,7 @@ $(document).ready(function(){
 
 	}); 
     
-    $(".submit2").click(function () {
+	$(".submit2").click(function () {
 	
 	    var userName = $("#userName").val();
 	    removePhoto(userName);

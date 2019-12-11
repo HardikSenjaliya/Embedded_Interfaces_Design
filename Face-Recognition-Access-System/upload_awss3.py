@@ -30,7 +30,7 @@ GPIO.setmode(GPIO.BCM)
 # set up GPIO output channel
 GPIO.setup(led, GPIO.OUT)
 
-#local_image = 'isha.jpg'
+
 bucket_name = 'eid-image-rekognition' 
 collection_id = 'user_profile_images'
 
@@ -52,28 +52,29 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         global count,stat
         print ('New connection established (Tornado <--> Client)')
         
+        #while loop to keep the camera going and update the cliet about match/no match images 
         while True:
 
-            time.sleep(4)
+
             #print("TORNADO..")
-
+            
             if(statust == 'no' or stat==0):
-                print("Lock on Client")
+                #print("Lock on Client")
 
-                self.write_message("Lock")
+                self.write_message("Unrecognized")
+                p.ChangeDutyCycle(2.5)
                 
             else:
-                print("Unlock on Client")
+                #print("Unlock on Client")
                 stat=0
                 self.write_message(statust)
-                
+                p.ChangeDutyCycle(12.5)
+                time.sleep(5)
 
       
     def on_message(self, message):
-        
-        
         data = message
-        
+ 
  
     def on_close(self):
         print ('Connection closed (Tornado <--> Client)')
@@ -184,8 +185,6 @@ class cameraclass(object):
                         statust= match['Face']['ExternalImageId']
                         statust = statust[:-4] 
                         stat=1
-                        p.ChangeDutyCycle(12.5)
-                        time.sleep(5)
                         
     
                         image = ''
@@ -244,7 +243,7 @@ def runcam():
 
             dist = cam.get_distance()
             print ("Measured Distance = %.1f cm" % dist)
-            if(dist < 90):
+            if(dist < 100):
                 cam.capture_image()
             else:
                 p.ChangeDutyCycle(2.5)
