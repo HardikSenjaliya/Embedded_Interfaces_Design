@@ -25,6 +25,11 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(servoPIN, GPIO.OUT)        
 p = GPIO.PWM(servoPIN, 50) # GPIO 17 for PWM with 50Hz
 
+led = 12
+GPIO.setmode(GPIO.BCM)
+# set up GPIO output channel
+GPIO.setup(led, GPIO.OUT)
+
 #local_image = 'isha.jpg'
 bucket_name = 'eid-image-rekognition' 
 collection_id = 'user_profile_images'
@@ -88,6 +93,7 @@ class cameraclass(object):
     
     
     def capture_image(self):
+        GPIO.output(12, GPIO.HIGH)
     #with picamera.PiCamera() as camera:
         camera = picamera.PiCamera()
         camera.resolution = (1280, 720)
@@ -108,8 +114,10 @@ class cameraclass(object):
         local_image = (timestamp+'.jpg')
         #local_image = 'Hardik_Portrait.JPG'
         
-        print ("Captured")
+        print ("Captured") 
         print(local_image)
+        
+        GPIO.output(12, GPIO.LOW)
               
         cam.find_face_in_collection(bucket_name, local_image, collection_id, camera)
   
@@ -229,13 +237,14 @@ def runcam():
     global stat
 
     cam.setup_servo()
+    GPIO.output(12, GPIO.LOW)
     
     try:
         while True:
 
             dist = cam.get_distance()
             print ("Measured Distance = %.1f cm" % dist)
-            if(dist < 200):
+            if(dist < 90):
                 cam.capture_image()
             else:
                 p.ChangeDutyCycle(2.5)
