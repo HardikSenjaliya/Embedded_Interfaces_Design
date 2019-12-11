@@ -51,25 +51,23 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         
         global count,stat
         print ('New connection established (Tornado <--> Client)')
-        
+                        
+        self.write_message("Unrecognized")
+        p.ChangeDutyCycle(2.5)
+                
         #while loop to keep the camera going and update the cliet about match/no match images 
         while True:
-
-
-            #print("TORNADO..")
-            
-            if(statust == 'no' or stat==0):
-                #print("Lock on Client")
-
-                self.write_message("Unrecognized")
-                p.ChangeDutyCycle(2.5)
                 
-            else:
-                #print("Unlock on Client")
+            if(stat == 1):
+                print("Unlock on Client")
                 stat=0
                 self.write_message(statust)
                 p.ChangeDutyCycle(12.5)
                 time.sleep(5)
+    
+                self.write_message("Unrecognized")
+                print("Locked")
+                p.ChangeDutyCycle(2.5)        
 
       
     def on_message(self, message):

@@ -15,6 +15,7 @@ $(document).ready(function(){
     $(".project").hide();
     $("#lockimg").hide();
     $("#unlockimg").hide();
+    $("#data_table").hide();
     $("#Message").hide();
    
    
@@ -62,6 +63,11 @@ $(document).ready(function(){
       if (!files.length) {
 	return alert("Please choose a file to upload first.");
       }
+      
+      
+      if ($("#userName").val() == '') {
+	return alert("Please enter a name to add");
+      }
     
       var file = files[0];
       var fileName = file.name;
@@ -87,6 +93,10 @@ $(document).ready(function(){
     
     function removePhoto(userName) {
 	
+	if ($("#userName").val() == '') {
+	    return alert("Please enter a name to delete");
+	}
+	
 	const params = {
 		Bucket: bucket_name,
 		Key: userName + '.jpg', // File name you want to save as in S3
@@ -97,6 +107,7 @@ $(document).ready(function(){
 	//Deleting photo from S3
 	s3.deleteObject(params, function(err, data) {
 	    if (err) {
+		$("#add-remove-status2").val('Invalid user');
 		throw err;
 	    }
 	    console.log(`File deleted successfully`);
@@ -118,10 +129,8 @@ $(document).ready(function(){
 	    console.log("Fill in the values to login..");
 	
 	if(un == "admin" && pw == "1234"){
-	
-	
-       // create websocket instance
-	wst = new WebSocket("ws://" + host + ":" + port + uri);  //tornado
+	    // create websocket instance
+		wst = new WebSocket("ws://" + host + ":" + port + uri);  //tornado
 		    
 	    console.log("Login successful");
 	    $("#username").val('');
@@ -132,6 +141,7 @@ $(document).ready(function(){
 	    $("#unlockimg").hide();
 	    $("#lockimg").show();
 	    $(".project").show();
+	    $("#unlock-name").val("Unrecognized");
 
 
 	}
@@ -193,6 +203,7 @@ $(document).ready(function(){
 	$(".get-database").click(function (){
 	    
 	    const params = { Bucket: bucket_name };
+	    $("#data_table").show();
 	    		
 	    $('#data_table > tr').remove();
 	    var html = '';
@@ -234,6 +245,7 @@ $(document).ready(function(){
 	$(".logout").click(function (){
 	    
 	    console.log("Logged Out");
+	    $("#data_table").hide();
 	    $("#Message").val('');
 	    $("#Message").hide();
 	    $("#username").val('');
@@ -246,13 +258,17 @@ $(document).ready(function(){
 	    $("#unlockimg").hide();
 	    $(".login").show();
 	    $(".connect").show();
+	    
+
 
 	});
 	
 	
 	$(".add-user").click(function () {
+
 	    console.log("Add User");
 	    window.location.href = 'adduser.html';
+	    
 	     
 	});
 	
@@ -283,6 +299,6 @@ $(document).ready(function(){
     
 			
 	}); 	
-    
+
 });
     

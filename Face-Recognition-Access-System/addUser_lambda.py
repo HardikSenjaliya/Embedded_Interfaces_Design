@@ -3,7 +3,8 @@ import boto3
 
 reko_client = boto3.client('rekognition')
 s3_client = boto3.client('s3')
-
+extfaces = []
+faceids = []
 collection_id = 'user_profile_images'
 
 def create_collection(collection_id):
@@ -21,29 +22,61 @@ def delete_collection(collection_id):
 
 def list_collections():
 
-    max_results=2
-    
+    global extfaces, faces
+    maxResults=2
+    faces_count=0
+    tokens=True
+
+
     client=boto3.client('rekognition')
+    response=client.list_faces(CollectionId=collection_id,
+                               MaxResults=maxResults)
 
-    #Display all the collections
-    print('Displaying collections...')
-    response=client.list_collections(MaxResults=max_results)
-    collection_count=0
-    done=False
-    
-    while done==False:
-        collections=response['CollectionIds']
+    #print('Faces in collection ' + collection_id)
 
-        for collection in collections:
-            print (collection)
-            collection_count+=1
+ 
+    while tokens:
+
+        faces=response['Faces']
+
+        for face in faces:
+            extfaces.append(face['ExternalImageId'])
+            #print(face)
+            faces_count+=1
         if 'NextToken' in response:
             nextToken=response['NextToken']
-            response=client.list_collections(NextToken=nextToken,MaxResults=max_results)
-            
+            response=client.list_faces(CollectionId=collection_id,
+                                       NextToken=nextToken,MaxResults=maxResults)
         else:
-            done=True
-            
+            tokens=False
+
+def find_collections(obj_key):
+
+    global extfaces, faces
+    maxResults=2
+    faces_count=0
+    tokens=True
+
+    client=boto3.client('rekognition')
+    response=client.list_faces(CollectionId=collection_id,
+                               MaxResults=maxResults)
+
+    while tokens:
+
+        faces=response['Faces']
+
+        for face in faces:
+            if(face['ExternalImageId'] == obj_key):
+                faceids.append(face['FaceId'])
+            faces_count+=1
+        if 'NextToken' in response:
+            nextToken=response['NextToken']
+            response=client.list_faces(CollectionId=collection_id,
+                                       NextToken=nextToken,MaxResults=maxResults)
+        else:
+            tokens=False
+
+    
             
 def add_faces_to_collection(bucket, image, collection_id):
     response=reko_client.index_faces(CollectionId=collection_id,
@@ -67,10 +100,33 @@ def add_faces_to_collection(bucket, image, collection_id):
             print('   ' + reason)
     return len(response['FaceRecords'])
 
+def delete_faces_from_collection(collection_id, faces):
+
+    client=boto3.client('rekognition')
+
+    response=client.delete_faces(CollectionId=collection_id,
+                               FaceIds=faces)
+    
+    print(str(len(response['DeletedFaces'])) + ' faces deleted:') 							
+    for faceId in response['DeletedFaces']:
+         print (faceId)
+    return len(response['DeletedFaces'])
+
+
 def lambda_handler(event, context):
+
+    global extfaces, faceids
+    
+    list_collections()
     
     for record in event['Records']:
         bucket_name = record['s3']['bucket']['name']
         obj_key = record['s3']['object']['key']
-        
-        add_faces_to_collection(bucket_name, obj_key, collection_id)
+
+        if(record['eventName'] == 'ObjectCreated:Put'):
+            add_faces_to_collection(bucket_name, obj_key, collection_id)
+        else:
+            for user in extfaces:
+                if(obj_key == user):
+                    find_collections(obj_key)
+                    delete_faces_from_collection(collection_id,faceids)

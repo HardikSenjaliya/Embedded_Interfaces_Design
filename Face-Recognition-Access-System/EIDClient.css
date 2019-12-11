@@ -149,7 +149,7 @@ h1 {
   box-sizing: border-box;
   border-radius: 25px;
   text-align: center;
-  font-size: 2.5rem;
+  font-size: 2.0rem;
   font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
   background-color: black;
   font-weight: bold;
@@ -326,7 +326,7 @@ h1 {
   border-collapse: collapse;
   width: 10%;
   border: 3px solid white;
-  font-size: 25px;
+  font-size: 30px;
   color: white;
   font-weight: bold;
 }
